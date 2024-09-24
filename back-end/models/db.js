@@ -3,8 +3,7 @@ import { Schema } from 'mongoose'
 
 const Signup = new Schema(
     {
-        email: { type: String, required: true },
-        name: { type: String, required: true },
+        name: { type: String, required: true,unique:true },
         password: { type: String, required: true },
         highScore: { type: Number, default: 0 }
     }
