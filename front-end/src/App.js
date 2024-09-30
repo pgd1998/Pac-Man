@@ -3,21 +3,24 @@ import './App.css';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HeaderHome from './components/headers/HomeHeader';
+import AnonymousGamePage from './pages/AnonymousGamePage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 function App() {
   return (
     <div className="App">
       <Router>
-        
         <Routes>
           {
             ["/", "/home"].map((path, index)=>
               <Route key={ index} path={path} element={<Home/>}/>
             )
           }
+          <Route path='/game' element={<AnonymousGamePage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage/>}/>
         </Routes>
       </Router>
-      
-      
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const UserHeader = () => {
-    const handleButtonClick = (action) => {
         const navigate = useNavigate();
+
+    const handleButtonClick = (action) => {
         if (action == 'home') {
             // TODO: Handle Quit Modal Logic and then go to Home
         }
