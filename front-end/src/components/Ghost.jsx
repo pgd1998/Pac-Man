@@ -13,8 +13,8 @@ const Ghost = ({initialPosition,maze}) => {
     }
 
     const moveGhost = () => {
-        const newX = position.x;
-        const newY = position.y;
+        let newX = position.x;
+        let newY = position.y;
 
         const newDirection = getRandomDirection();
 
@@ -41,7 +41,7 @@ const Ghost = ({initialPosition,maze}) => {
     };
 
     useEffect(() => {
-        const interval = setInterval(moveGhost, 500);
+        const interval = setInterval(moveGhost, 300);
         return () => clearInterval(interval);
     }, [position]);
 

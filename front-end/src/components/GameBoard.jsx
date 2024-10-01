@@ -6,6 +6,8 @@ import Ghost from './Ghost';
 
 const GameBoard = () => {
     const [maze, setMaze] = useState(mazeLayout);
+    const pacManInitialPosition = { x: 1, y: 1 };
+    const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
     const ghostInitialPositions = [
         { x: 5, y: 5 },
         { x: 10, y: 10 },
@@ -13,6 +15,19 @@ const GameBoard = () => {
         
     ]
 
+    const handlePacManMove = (newPosition) => {
+        setPacManPosition(newPosition);
+        checkCollisions(newPosition);
+    }
+
+    const checkCollisions = (pacmanPos) => {
+        ghostInitialPositions.forEach((ghostPos) => {
+            if (pacmanPos.x === ghostPos.x && pacmanPos.y === ghostPos.y) {
+                alert('Game Over')
+                // TODO: properly handle by adding 2 more lives
+            }
+        })
+    }
 
     return (
         <div className='game-board'>
@@ -27,7 +42,7 @@ const GameBoard = () => {
                     ))}
                 </div>
             ))}
-            <PacMan maze={maze} setMaze={setMaze} />
+            <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={setMaze} onMove={ handlePacManMove} />
             {ghostInitialPositions.map((pos, index) => (
                 <Ghost key={index} initialPosition={pos} maze={maze}/>
             ))}

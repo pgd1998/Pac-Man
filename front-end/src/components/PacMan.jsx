@@ -3,8 +3,8 @@ import './PacMan.css';
 
 const CELL_SIZE = 40;
 
-const PacMan = ({maze,setMaze}) => {
-    const [position, setPosition] = useState({ x: 1, y: 1 });
+const PacMan = ({initialPosition, maze,setMaze,onMove}) => {
+    const [position, setPosition] = useState(initialPosition);
     const [direction, setDirection] = useState(null);
 
     const handleKeyDown = (e) => {
@@ -53,6 +53,7 @@ const PacMan = ({maze,setMaze}) => {
         // and which are still available and also to avoid re-consumption.
         if (maze[newY][newX] != 1) {
             setPosition({ x: newX, y: newY });
+            onMove({ x: newX, y: newY });
             if (maze[newY][newX] === 0) {
                 const newMaze = maze.map((row, rowIndex) =>
                     row.map((cell, cellIndex) => {
