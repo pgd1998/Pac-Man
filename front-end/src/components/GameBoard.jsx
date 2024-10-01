@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import { mazeLayout } from '../utils/maze';
 import './GameBoard.css';
 import PacMan from './PacMan';
+import Ghost from './Ghost';
 
 const GameBoard = () => {
     const [maze, setMaze] = useState(mazeLayout);
+    const ghostInitialPositions = [
+        { x: 5, y: 5 },
+        { x: 10, y: 10 },
+        { x: 15, y: 15 }
+        
+    ]
+
 
     return (
         <div className='game-board'>
@@ -19,7 +27,10 @@ const GameBoard = () => {
                     ))}
                 </div>
             ))}
-            <PacMan maze={maze} setMaze={setMaze}/>
+            <PacMan maze={maze} setMaze={setMaze} />
+            {ghostInitialPositions.map((pos, index) => (
+                <Ghost key={index} initialPosition={pos} maze={maze}/>
+            ))}
         </div>);
 }
 
