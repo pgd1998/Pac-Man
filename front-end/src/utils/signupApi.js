@@ -7,7 +7,7 @@ const signupApi = async (signupData) => {
                 "Content-Type": "application/json",
             },
         });
-        return response.data;
+        return response.data.token;
     } catch (error) {
         if (error.response && error.response.data) {
             throw new Error(error.response.data.message || "Failed to signup user");

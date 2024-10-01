@@ -5,7 +5,14 @@ const SignupForm = () => {
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
-        
+        const signupData = {
+            name,
+            password
+        }
+        const response = await signupApi(signupData);
+        localStorage.setItem('token',response)
+        setName('');
+        setPassword('');
     }
 
     return (

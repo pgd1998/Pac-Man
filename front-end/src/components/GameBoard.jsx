@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { mazeLayout } from '../utils/maze';
 import './GameBoard.css';
 import PacMan from './PacMan';
 
 const GameBoard = () => {
+    const [maze, setMaze] = useState(mazeLayout);
+
     return (
         <div className='game-board'>
-            {mazeLayout.map((row, rowIndex) => (
+            {maze.map((row, rowIndex) => (
                 <div key={rowIndex} className='row'>
                     {row.map((cell, cellIndex) => (
                         <div
@@ -17,7 +19,7 @@ const GameBoard = () => {
                     ))}
                 </div>
             ))}
-            <PacMan />
+            <PacMan maze={maze} setMaze={setMaze}/>
         </div>);
 }
 

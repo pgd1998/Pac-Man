@@ -5,7 +5,15 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
+        const loginData={
+            name,
+            password
+        }
         
+        const response = await loginApi(loginData);
+        localStorage.setItem('token', response);
+        setName('');
+        setPassword('')
     }
 
     return (

@@ -7,7 +7,7 @@ const loginApi = async (loginData) => {
                 "Content-Type": "application/json",
             },
         });
-        return response.data;
+        return response.data.token;
     } catch (error) {
         if (error.response && error.response.data) {
             throw new Error(error.response.data||"Failed to login")
