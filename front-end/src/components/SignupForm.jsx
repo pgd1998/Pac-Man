@@ -19,7 +19,7 @@ const SignupForm = () => {
         <form onSubmit={handleSubmit}>
             <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' required />
             <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
-            <input type='submit'>Signup</input>
+            <button type='submit'>Signup</button>
         </form>
     )
 }
