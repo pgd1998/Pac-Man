@@ -14,14 +14,22 @@ const GameBoard = () => {
         { x: 15, y: 15 }
         
     ]
+    const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
 
     const handlePacManMove = (newPosition) => {
         setPacManPosition(newPosition);
-        checkCollisions(newPosition);
+        checkCollisions(newPosition,ghostPositions);
+    };
+
+    const handleGhostMove = (index,newPosition) => {
+        const newGhostPositions = [...ghostPositions]
+        newGhostPositions[index] = newPosition;
+        setGhostPositions(newGhostPositions);
+        checkCollisions(pacManPosition, newGhostPositions);
     }
 
-    const checkCollisions = (pacmanPos) => {
-        ghostInitialPositions.forEach((ghostPos) => {
+    const checkCollisions = (pacmanPos,ghostPosArray) => {
+        ghostPosArray.forEach((ghostPos) => {
             if (pacmanPos.x === ghostPos.x && pacmanPos.y === ghostPos.y) {
                 alert('Game Over')
                 // TODO: properly handle by adding 2 more lives
@@ -44,7 +52,7 @@ const GameBoard = () => {
             ))}
             <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={setMaze} onMove={ handlePacManMove} />
             {ghostInitialPositions.map((pos, index) => (
-                <Ghost key={index} initialPosition={pos} maze={maze}/>
+                <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} />
             ))}
         </div>);
 }

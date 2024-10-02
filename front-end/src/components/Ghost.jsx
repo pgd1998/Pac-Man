@@ -3,7 +3,7 @@ import './Ghost.css';
 
 const CELL_SIZE = 40;
 
-const Ghost = ({initialPosition,maze}) => {
+const Ghost = ({initialPosition,maze,onMove}) => {
     const [position, setPosition] = useState(initialPosition);
     const [direction, setDirection] = useState(null);
 
@@ -37,6 +37,8 @@ const Ghost = ({initialPosition,maze}) => {
         if (maze[newY][newX] !== 1) {
             setPosition({ x: newX, y: newY });
             setDirection(newDirection);
+            onMove({ x: newX, y: newY });
+
         }
     };
 
