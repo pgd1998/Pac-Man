@@ -1,6 +1,6 @@
 import React from "react";
 import UserHeader from "../components/headers/UserHeader";
-import LoginForm from "../components/LoginForm"
+import LoginForm from "../components/forms/LoginForm"
 const LoginPage = () => {
     return (
     <div>

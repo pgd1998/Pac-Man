@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-
+import './HomeHeader.css';
 const HeaderHome = () => {
     const navigate = useNavigate();
 
@@ -18,9 +18,9 @@ const HeaderHome = () => {
 
     return (
         <div className="header-home">
-            <button onClick={()=>handleButtonClick('game')}>Play Game</button>
-            <button onClick={() => handleButtonClick('login')}>Login</button>
-            <button onClick={() => handleButtonClick('signup')}>Signup</button>
+            <button className="play-game" onClick={()=>handleButtonClick('game')}>Play Game</button>
+            <button className="login" onClick={() => handleButtonClick('login')}>Login</button>
+            <button className="signup" onClick={() => handleButtonClick('signup')}>Signup</button>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import UserHeader from "../components/headers/UserHeader";
-import SignupForm from "../components/SignupForm"
+import SignupForm from "../components/forms/SignupForm"
 const SignupPage = () => {
 
     return (
