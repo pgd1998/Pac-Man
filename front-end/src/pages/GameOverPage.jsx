@@ -14,7 +14,7 @@ const GameOver = () => {
         <div>
             <h1>Game Over!</h1>
             <br/>
-            <div>High Score: {totalScore}</div>
+            <div>Total Score: {totalScore}</div>
             <button onClick={handleButtonClick}>Home</button>
         </div>
     )

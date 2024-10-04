@@ -1,7 +1,21 @@
-.ghost{
+/* .ghost{
     width: 20px;
     height: 20px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
+} */
+
+.ghost {
+    width: 20px;
+    /* Adjusted to fit within the cell */
+    height: 20px;
+    /* Adjusted to fit within the cell */
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    justify-content: center;
+    transform: translate(-50%, -50%);
 }

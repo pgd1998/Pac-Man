@@ -17,7 +17,7 @@ const GameBoard = () => {
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
     const [score, setScore] = useState(() => {
         const savedScore = sessionStorage.getItem('score');
-        return savedScore ? parseInt(savedScore, 10) : 0;
+        return savedScore ? parseInt(savedScore) : 0;
     });
 
     const navigate = useNavigate();

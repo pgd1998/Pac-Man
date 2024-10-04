@@ -1,5 +1,4 @@
 import React,{useState} from "react";
-import { useNavigate } from "react-router-dom";
 import QuitModal from "../modals/QuitModal";
 import HomeModal from "../modals/HomeModal";
 const AnonymousHeader = () => {

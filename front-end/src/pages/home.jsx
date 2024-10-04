@@ -1,8 +1,9 @@
 import React from "react";
 import HeaderHome from "../components/headers/HomeHeader";
+import "./HomePage.css"
 const Home = () => {
     return (
-        <div>
+        <div className="home-container">
             <HeaderHome/>
             <h1>Welcome to Pac-Man</h1>
             <p>

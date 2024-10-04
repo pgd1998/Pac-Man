@@ -50,8 +50,8 @@ const Ghost = ({initialPosition,maze,onMove}) => {
         <div
             className="ghost"
             style={{
-                top: `${position.y * CELL_SIZE}px`,
-                left:`${position.x * CELL_SIZE}px`
+                top: `${position.y * CELL_SIZE + CELL_SIZE / 2 + 10}px`,
+                left: `${position.x * CELL_SIZE + CELL_SIZE / 2 + 10}px`
             }}
         >
         </div>

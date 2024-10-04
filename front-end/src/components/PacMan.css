@@ -1,7 +1,21 @@
-.pacman{
+/* .pacman{
     width: 20px;
     height: 20px;
     background-color: #ff0;
     border-radius: 50%;
     position: absolute;
+} */
+
+.pacman {
+    width: 20px;
+    /* Adjusted to fit within the cell */
+    height: 20px;
+    /* Adjusted to fit within the cell */
+    background-color: #ff0;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    justify-content: center;
+    transform: translate(-50%, -50%);
 }
