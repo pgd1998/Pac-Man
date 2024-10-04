@@ -3,8 +3,9 @@ import { mazeLayout } from '../utils/maze';
 import './GameBoard.css';
 import PacMan from './PacMan';
 import Ghost from './Ghost';
-
+import { useNavigate } from 'react-router-dom';
 const GameBoard = () => {
+    const [lives,setLives]=useState(2)
     const [maze, setMaze] = useState(mazeLayout);
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
@@ -12,10 +13,15 @@ const GameBoard = () => {
         { x: 5, y: 5 },
         { x: 10, y: 10 },
         { x: 15, y: 15 }
-        
     ]
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
+    const [score, setScore] = useState(() => {
+        const savedScore = sessionStorage.getItem('score');
+        return savedScore ? parseInt(savedScore, 10) : 0;
+    });
 
+    const navigate = useNavigate();
+    
     const handlePacManMove = (newPosition) => {
         setPacManPosition(newPosition);
         checkCollisions(newPosition,ghostPositions);
@@ -31,14 +37,32 @@ const GameBoard = () => {
     const checkCollisions = (pacmanPos,ghostPosArray) => {
         ghostPosArray.forEach((ghostPos) => {
             if (pacmanPos.x === ghostPos.x && pacmanPos.y === ghostPos.y) {
-                alert('Game Over')
-                // TODO: properly handle by adding 2 more lives
+                setLives((prevLives) => {
+                    const newLives = prevLives - 1;
+                    if (newLives < 0) {
+                        navigate('/game-over')
+                    }
+                    return newLives
+                });
+                setPacManPosition(pacManInitialPosition);
+                setGhostPositions(ghostInitialPositions);
             }
         })
     }
 
+    const handlePelletConsumption = (newMaze,points) => {
+        setScore((prevScore) => {
+            const newScore = prevScore + points;
+            sessionStorage.setItem('score', newScore);
+            return newScore;
+        });
+        setMaze(newMaze);
+    }
+
     return (
         <div className='game-board'>
+            <div className='lives'>Lives:{lives}</div>
+            <div className='score'>Score:{score}</div>
             {maze.map((row, rowIndex) => (
                 <div key={rowIndex} className='row'>
                     {row.map((cell, cellIndex) => (
@@ -50,7 +74,7 @@ const GameBoard = () => {
                     ))}
                 </div>
             ))}
-            <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={setMaze} onMove={ handlePacManMove} />
+            <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={handlePelletConsumption} onMove={ handlePacManMove} />
             {ghostInitialPositions.map((pos, index) => (
                 <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} />
             ))}

@@ -6,6 +6,7 @@ import HeaderHome from './components/headers/HomeHeader';
 import AnonymousGamePage from './pages/AnonymousGamePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import GameOver from './pages/GameOverPage';
 function App() {
   return (
     <div className="App">
@@ -18,7 +19,8 @@ function App() {
           }
           <Route path='/game' element={<AnonymousGamePage />} />
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/signup' element={<SignupPage/>}/>
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/game-over' element={<GameOver/>}/>
         </Routes>
       </Router>
     </div>

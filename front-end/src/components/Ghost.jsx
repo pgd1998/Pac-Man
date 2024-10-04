@@ -38,7 +38,6 @@ const Ghost = ({initialPosition,maze,onMove}) => {
             setPosition({ x: newX, y: newY });
             setDirection(newDirection);
             onMove({ x: newX, y: newY });
-
         }
     };
 
