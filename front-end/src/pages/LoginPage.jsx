@@ -4,7 +4,7 @@ import LoginForm from "../components/forms/LoginForm"
 const LoginPage = () => {
     return (
     <div>
-    <UserHeader />
+    {/* <UserHeader /> */}
     <LoginForm/>
     </div>
     )

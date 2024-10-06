@@ -5,7 +5,7 @@ const SignupPage = () => {
 
     return (
         <div>
-            <UserHeader />
+            {/* <UserHeader /> */}
             <SignupForm/>
         </div>
     )
