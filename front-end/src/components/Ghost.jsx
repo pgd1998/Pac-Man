@@ -3,14 +3,14 @@ import './Ghost.css';
 
 const CELL_SIZE = 40;
 
-const Ghost = ({initialPosition,maze,onMove}) => {
+const Ghost = ({ initialPosition, maze, onMove, type }) => {
     const [position, setPosition] = useState(initialPosition);
     const [direction, setDirection] = useState(null);
 
     const getRandomDirection = () => {
         const allDirections = ['up', 'down', 'left', 'right'];
-        return allDirections[Math.floor(Math.random()*allDirections.length)]
-    }
+        return allDirections[Math.floor(Math.random() * allDirections.length)];
+    };
 
     const moveGhost = () => {
         let newX = position.x;
@@ -34,7 +34,7 @@ const Ghost = ({initialPosition,maze,onMove}) => {
             default:
                 break;
         }
-        if (maze[newY][newX] !== 1) {
+        if (newY >= 0 && newY < maze.length && newX >= 0 && newX < maze[0].length && maze[newY][newX] !== 1) {
             setPosition({ x: newX, y: newY });
             setDirection(newDirection);
             onMove({ x: newX, y: newY });
@@ -48,15 +48,14 @@ const Ghost = ({initialPosition,maze,onMove}) => {
 
     return (
         <div
-            className="ghost"
+            className={`ghost ghost-${type}`}
             style={{
                 top: `${position.y * CELL_SIZE + CELL_SIZE / 2 + 10}px`,
                 left: `${position.x * CELL_SIZE + CELL_SIZE / 2 + 10}px`
             }}
         >
         </div>
-    )
-}
+    );
+};
 
 export default Ghost;
-

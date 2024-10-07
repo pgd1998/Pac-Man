@@ -10,9 +10,10 @@ const GameBoard = () => {
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
     const ghostInitialPositions = [
-        { x: 5, y: 5 },
-        { x: 10, y: 10 },
-        { x: 15, y: 15 }
+        { x: 5, y: 5, type:'red' },
+        { x: 10, y: 10, type:'green'},
+        { x: 15, y: 15, type: 'blue' },
+        {x:20,y:20,type:'purple'}
     ]
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
     const [score, setScore] = useState(() => {
@@ -29,7 +30,7 @@ const GameBoard = () => {
 
     const handleGhostMove = (index,newPosition) => {
         const newGhostPositions = [...ghostPositions]
-        newGhostPositions[index] = newPosition;
+        newGhostPositions[index] = {...newGhostPositions[index], ...newPosition};
         setGhostPositions(newGhostPositions);
         checkCollisions(pacManPosition, newGhostPositions);
     }
@@ -60,6 +61,7 @@ const GameBoard = () => {
     }
 
     return (
+        <div className='game-board-container'>
         <div className='game-board'>
             <div className='lives'>Lives:{lives}</div>
             <div className='score'>Score:{score}</div>
@@ -76,9 +78,10 @@ const GameBoard = () => {
             ))}
             <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={handlePelletConsumption} onMove={ handlePacManMove} />
             {ghostInitialPositions.map((pos, index) => (
-                <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} />
+                <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} type={pos.type}/>
             ))}
-        </div>);
+            </div>
+            </div>);
 }
 
 export default GameBoard;

@@ -7,15 +7,14 @@
 } */
 
 .pacman {
-    width: 20px;
-    /* Adjusted to fit within the cell */
-    height: 20px;
-    /* Adjusted to fit within the cell */
-    background-color: #ff0;
-    border-radius: 50%;
+    width: 3%;
+    height: 3%;
+    background-image: url('../assets/pacman.png');
+    /* Update with the correct path */
+    background-size: cover;
+    background-repeat: no-repeat;
     position: absolute;
     top: 50%;
     left: 50%;
-    justify-content: center;
     transform: translate(-50%, -50%);
 }
