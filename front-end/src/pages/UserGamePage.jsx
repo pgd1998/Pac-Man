@@ -1,12 +1,11 @@
 import React from "react";
-import UserHeader from "../components/headers/UserHeader";
 import GameBoard from "../components/GameBoard";
-
+import GameBoardHeader from "../components/headers/GameBoardHeader";
 
 const UserGamePage = () => {
     return (
         <div>
-            <UserHeader />
+            <GameBoardHeader user={ "user"} />
             <GameBoard/>
         </div>
     )

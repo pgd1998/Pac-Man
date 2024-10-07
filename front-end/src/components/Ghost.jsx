@@ -12,6 +12,10 @@ const Ghost = ({ initialPosition, maze, onMove, type }) => {
         return allDirections[Math.floor(Math.random() * allDirections.length)];
     };
 
+    const isValidMove = (y, x) => {
+        return y >= 0 && y < maze.length && x >= 0 && x < maze[0].length && maze[y][x] !== 1;
+    };
+
     const moveGhost = () => {
         let newX = position.x;
         let newY = position.y;
@@ -20,21 +24,22 @@ const Ghost = ({ initialPosition, maze, onMove, type }) => {
 
         switch (newDirection) {
             case 'up':
-                newY = Math.max(0, position.y - 1);
+                newY = position.y - 1;
                 break;
             case 'down':
-                newY = Math.min(maze.length - 1, position.y + 1);
+                newY = position.y + 1;
                 break;
             case 'right':
-                newX = Math.min(maze[0].length - 1, position.x + 1);
+                newX = position.x + 1;
                 break;
             case 'left':
-                newX = Math.max(0, position.x - 1);
+                newX = position.x - 1;
                 break;
             default:
                 break;
         }
-        if (newY >= 0 && newY < maze.length && newX >= 0 && newX < maze[0].length && maze[newY][newX] !== 1) {
+
+        if (isValidMove(newY, newX)) {
             setPosition({ x: newX, y: newY });
             setDirection(newDirection);
             onMove({ x: newX, y: newY });

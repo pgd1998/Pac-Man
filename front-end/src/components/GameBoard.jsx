@@ -4,6 +4,8 @@ import './GameBoard.css';
 import PacMan from './PacMan';
 import Ghost from './Ghost';
 import { useNavigate } from 'react-router-dom';
+import UtilsHeader from './headers/UtilsHeader';
+
 const GameBoard = () => {
     const [lives,setLives]=useState(2)
     const [maze, setMaze] = useState(mazeLayout);
@@ -63,8 +65,7 @@ const GameBoard = () => {
     return (
         <div className='game-board-container'>
         <div className='game-board'>
-            <div className='lives'>Lives:{lives}</div>
-            <div className='score'>Score:{score}</div>
+            <UtilsHeader lives={lives} score={score}/>
             {maze.map((row, rowIndex) => (
                 <div key={rowIndex} className='row'>
                     {row.map((cell, cellIndex) => (

@@ -1,5 +1,5 @@
 /* Container for the game board */
-.game-board-container {
+/* .game-board-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -7,7 +7,7 @@
     height: 100vh;
     background-color: #000;
     box-sizing: border-box;
-}
+} */
 
 /* Game board */
 .game-board {
@@ -24,7 +24,7 @@
     /* Maximum width to maintain aspect ratio */
     max-height: 620px;
     /* Maximum height to maintain aspect ratio */
-    background-color: #000;
+    /* background-color: #000; */
     /* Black background for the game board */
     border: 10px solid #000;
     /* Border to match the classic Pac-Man look */
