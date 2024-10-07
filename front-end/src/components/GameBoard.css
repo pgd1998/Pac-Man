@@ -1,39 +1,118 @@
+/* Container for the game board */
+/* .game-board-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    box-sizing: border-box;
+} */
+
+/* Game board */
 .game-board {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 800px;
-    /* Set the width to match the maze dimensions */
-    height: 720px;
-    /* Set the height to match the maze dimensions */
-    margin: 0 auto;
-    /* Center the game-board horizontally */
+    width: 90vw;
+    /* Use viewport width for responsiveness */
+    height: 90vh;
+    /* Use viewport height for responsiveness */
+    max-width: 700px;
+    /* Maximum width to maintain aspect ratio */
+    max-height: 620px;
+    /* Maximum height to maintain aspect ratio */
+    /* background-color: #000; */
+    /* Black background for the game board */
+    border: 10px solid #000;
+    /* Border to match the classic Pac-Man look */
+    box-sizing: border-box;
+    /* Include border in the element's total width and height */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    /* Add some shadow for depth */
 }
 
 .row {
     display: flex;
+    width: 100%;
+    /* Ensure rows take full width of the game board */
 }
 
 .cell {
-    width: 40px;
-    height: 40px;
-    /* border: 1px solid #000; */
+    flex: 1;
+    /* Make cells flexible to fit the row */
+    position: relative;
+    /* Ensure child elements are positioned relative to the cell */
+    aspect-ratio: 1 / 1;
+    /* Maintain square aspect ratio */
 }
 
 .wall {
     background-color: #2e2d2d;
+    border: 2px solid #000;
+    /* Add border to walls for better visibility */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    /* Add inner shadow for depth */
 }
 
 .path {
-    background-color: white;
+    background-color: #000;
+    /* Paths are black */
 }
 
 .pellet {
-    width: 5px;
-    height: 5px;
-    background-color: rgb(1, 77, 1);
+    width: 20%;
+    /* Use percentage for responsiveness */
+    height: 20%;
+    /* Use percentage for responsiveness */
+    background-color: #ffb8ae;
+    /* Light pink color for pellets */
     border-radius: 50%;
     margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.power-pellet {
+    width: 40%;
+    /* Use percentage for responsiveness */
+    height: 40%;
+    /* Use percentage for responsiveness */
+    background-color: #ffb8ae;
+    /* Light pink color for power pellets */
+    border-radius: 50%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #ffb8ae;
+    /* Glow effect for power pellets */
+}
+
+.ghost-house {
+    background-color: #000;
+    /* Ghost house background */
+    border: 2px dashed #ff0000;
+    /* Red dashed border for ghost house */
+    box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.5);
+    /* Inner shadow for depth */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    .game-board {
+        width: 100vw;
+        /* Full viewport width */
+        height: 100vh;
+        /* Full viewport height */
+        max-width: none;
+        /* Remove max-width constraint */
+        max-height: none;
+        /* Remove max-height constraint */
+    }
 }

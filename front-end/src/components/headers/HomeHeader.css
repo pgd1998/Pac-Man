@@ -1,0 +1,47 @@
+.header-home button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #d3d3d3;
+    transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    /* Smooth transition for hover effects */
+}
+
+.header-home .play-game {
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.header-home .login {
+    border-color: #008CBA;
+    color: #008CBA;
+}
+
+.header-home .signup {
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.header-home button:hover {
+    transform: scale(1.05);
+    /* Slightly enlarge the button on hover */
+}
+
+.header-home .play-game:hover {
+    background-color: #e8f5e9;
+    border-color: #45a049;
+}
+
+.header-home .login:hover {
+    background-color: #e1f5fe;
+    border-color: #007bb5;
+}
+
+.header-home .signup:hover {
+    background-color: #ffebee;
+    border-color: #e53935;
+}

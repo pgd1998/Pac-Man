@@ -1,0 +1,20 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    font-size: 1.2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    /* Ensure it is above the game board */
+}
+
+.lives,
+.score {
+    margin: 0;
+}

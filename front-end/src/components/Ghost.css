@@ -1,0 +1,23 @@
+.ghost {
+    width: 3%;
+    height: 3%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ghost-red{
+    background-image: url('../assets/ghosts/g1.jpg');
+}
+.ghost-green {
+    background-image: url('../assets/ghosts/g2.jpg');
+}
+.ghost-blue {
+    background-image: url('../assets/ghosts/g3.jpg');
+}
+.ghost-purple {
+    background-image: url('../assets/ghosts/g4.jpg');
+}

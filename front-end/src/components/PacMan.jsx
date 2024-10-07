@@ -3,8 +3,8 @@ import './PacMan.css';
 
 const CELL_SIZE = 40;
 
-const PacMan = ({maze,setMaze}) => {
-    const [position, setPosition] = useState({ x: 1, y: 1 });
+const PacMan = ({initialPosition, maze,setMaze,onMove}) => {
+    const [position, setPosition] = useState(initialPosition);
     const [direction, setDirection] = useState(null);
 
     const handleKeyDown = (e) => {
@@ -24,8 +24,11 @@ const PacMan = ({maze,setMaze}) => {
             default:
                 break;
         }
-    }
+    };
 
+    const isValidMove = (y, x) => {
+        return maze[y][x] !== 1;
+    }
     // In the switch here max(0) and min(maze.length) is used to overflow from the maze
     const movePacMan=() => {
         let newX = position.x;
@@ -51,8 +54,10 @@ const PacMan = ({maze,setMaze}) => {
         // The 2 serves as a marker to indicate that a pellet was present in that cell 
         // but has now been consumed.This helps in keeping track of which pellets have been eaten 
         // and which are still available and also to avoid re-consumption.
-        if (maze[newY][newX] != 1) {
+        if (isValidMove(newY,newX)) {
             setPosition({ x: newX, y: newY });
+            onMove({ x: newX, y: newY });
+
             if (maze[newY][newX] === 0) {
                 const newMaze = maze.map((row, rowIndex) =>
                     row.map((cell, cellIndex) => {
@@ -62,7 +67,7 @@ const PacMan = ({maze,setMaze}) => {
                         return cell;
                     })
                 )
-                setMaze(newMaze);
+                setMaze(newMaze,5);
             }
         }
     }
@@ -85,8 +90,8 @@ const PacMan = ({maze,setMaze}) => {
         <div 
             className="pacman"
             style={{
-                top: `${position.y * CELL_SIZE}px`,
-                left:`${position.x * CELL_SIZE}px`
+                top: `${position.y * CELL_SIZE + CELL_SIZE / 2 +10}px`,
+                left: `${position.x * CELL_SIZE + CELL_SIZE / 2 +10}px`
         }}></div>
     )
 }
