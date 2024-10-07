@@ -1,17 +1,14 @@
 import React from "react";
 import GameBoardHeader from "../components/headers/GameBoardHeader";
 import GameBoard from "../components/GameBoard";
-import './AnonymousGamePage.css';
+// import './AnonymousGamePage.css';
+import '../components/GameBoard.css'
 
 const AnonymousGamePage = () => {
     return (
-        <div className="page-container">
-            <div className="header">
-                <GameBoardHeader user={"userrrr"} />
-            </div>
-            <div className="game-board-container">
+        <div className="game-page-container">
+                <GameBoardHeader user={"user"} />
                 <GameBoard />
-            </div>
         </div>
     );
 }

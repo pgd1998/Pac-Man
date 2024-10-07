@@ -8,7 +8,7 @@
     z-index: 999;
 }
 
-.quit-modal{
+.modal{
     position: fixed;
     top: 50%;
     left: 50%;
@@ -17,19 +17,18 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* display: flex; */
     z-index: 1000;
     width: 300px;
     text-align: center;
 }
 
-.quit-modal p{
+.modal p{
     margin-bottom: 20px;
     font-size: 16px;
     color:#333;
 }
 
-.quit-modal button{
+.modal button{
     margin: 0 10px;
     padding: 10px 20px;
     border: none;
@@ -38,12 +37,12 @@
     font-size: 14px;
 }
 
-.quit-modal button:first-of-type{
+.modal button:first-of-type{
     background-color: #d9534f;
     color: white;
 }
 
-.quit-modal button:last-of-type{
+.modal button:last-of-type{
     background-color: #5bc0de;
     color: white;
 }

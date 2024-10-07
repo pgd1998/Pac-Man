@@ -64,25 +64,25 @@ const GameBoard = () => {
 
     return (
         <div className='game-board-container'>
-        <div className='game-board'>
-            <UtilsHeader lives={lives} score={score}/>
-            {maze.map((row, rowIndex) => (
-                <div key={rowIndex} className='row'>
-                    {row.map((cell, cellIndex) => (
-                        <div
-                            key={cellIndex}
-                            className={`cell ${cell === 1 ? 'wall' : 'path'}`}>
-                            {cell === 0 && <div className='pellet'></div>}
+            <UtilsHeader lives={lives} score={score} />
+                <div className='game-board'>
+                    {maze.map((row, rowIndex) => (
+                        <div key={rowIndex} className='row'>
+                            {row.map((cell, cellIndex) => (
+                                <div
+                                    key={cellIndex}
+                                    className={`cell ${cell === 1 ? 'wall' : 'path'}`}>
+                                    {cell === 0 && <div className='pellet'></div>}
+                                </div>
+                            ))}
                         </div>
                     ))}
+                    <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={handlePelletConsumption} onMove={ handlePacManMove} />
+                    {ghostInitialPositions.map((pos, index) => (
+                        <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} type={pos.type}/>
+                    ))}
                 </div>
-            ))}
-            <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={handlePelletConsumption} onMove={ handlePacManMove} />
-            {ghostInitialPositions.map((pos, index) => (
-                <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} type={pos.type}/>
-            ))}
-            </div>
-            </div>);
+        </div>);
 }
 
 export default GameBoard;

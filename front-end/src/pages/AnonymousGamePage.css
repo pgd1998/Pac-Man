@@ -24,14 +24,3 @@
     /* Optional: Add a shadow for better visibility */
 }
 
-.game-board-container {
-    margin-top: 20px;
-    /* Add some space between the header and the gameboard */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: calc(100vh - 60px);
-    /* Adjust this value based on the height of your header */
-    box-sizing: border-box;
-}
