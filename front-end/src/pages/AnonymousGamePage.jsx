@@ -7,7 +7,7 @@ import '../components/GameBoard.css'
 const AnonymousGamePage = () => {
     return (
         <div className="game-page-container">
-                <GameBoardHeader user={"user"} />
+                <GameBoardHeader />
                 <GameBoard />
         </div>
     );

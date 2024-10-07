@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Login.css'
 import { useNavigate } from 'react-router';
 import useLogin from '../../hooks/useLogin';
+import UserGamePage from '../../pages/UserGamePage';
 
 const LoginForm = () => {
     const [name, setName] = useState('');
@@ -17,10 +18,12 @@ const LoginForm = () => {
         }
         try {
             const res = await login(loginData);
-            console.log(res);
             setName('');
             setPassword('')
             // TODO: After success route to Gameboard with a Welcome back message
+            if (res){
+                navigate('/user-game')
+            }
         }
         catch {
             // setIsError("Login failed Try again.")
@@ -34,8 +37,8 @@ const LoginForm = () => {
     }
 
     return (
-        <div className='login-form-container'>
-            <form className="login-form" onSubmit={handleSubmit}>
+        <div className='form-container'>
+            <form className="form" onSubmit={handleSubmit}>
                 <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' required />
                 <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
                 <div className='button-container'>

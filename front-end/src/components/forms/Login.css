@@ -1,5 +1,5 @@
 /* Container for the form */
-.login-form-container {
+.form-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,7 +10,7 @@
 }
 
 /* Form styling */
-.login-form {
+.form {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
@@ -20,8 +20,8 @@
 }
 
 /* Input fields styling */
-.login-form input[type='text'],
-.login-form input[type='password'] {
+.form input[type='text'],
+.form input[type='password'] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -38,7 +38,7 @@
 }
 
 /* Button styling */
-.login-form button {
+.form button {
     padding: 10px;
     background-color: #4CAF50;
     color: white;
@@ -51,21 +51,21 @@
     margin: 0 5px;
 }
 
-.login-form button.cancel{
+.form button.cancel{
     background-color: #f44336;
 }
 
-.login-form button:disabled {
+.form button:disabled {
     background-color: #9E9E9E;
     cursor: not-allowed;
 }
 
-.login-form button:hover:not(:disabled) {
+.form button:hover:not(:disabled) {
     background-color: #45a049;
 }
 
 /* Error message styling */
-.login-form p {
+.form p {
     color: red;
     font-size: 14px;
     margin-top: 10px;
