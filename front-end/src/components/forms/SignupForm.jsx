@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import signupApi from '../../utils/signupApi';
+import useSignUp from '../../hooks/useSignUp';
 const SignupForm = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [isError,setIsError]=useState('')
+    const { signup, loading, error } = useSignUp();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const signupData = {
@@ -12,19 +13,15 @@ const SignupForm = () => {
             password
         }
         try {
-            setLoading(true);
-            const response = await signupApi(signupData);
-            localStorage.setItem('token',response)
+            await signup(signupData);
             setName('');
             setPassword('');
             // TODO: after success route to Gameboard with a Welcome/Thank you message
         } 
         
         catch (error) {
-            setIsError("Signup failed. Please try again.");
-        } finally {
-            setLoading(false);
-        }
+            // setIsError("Signup failed. Please try again.");
+        } 
     }
 
     return (
@@ -32,7 +29,7 @@ const SignupForm = () => {
             <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' required />
             <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
             <button type='submit' disabled={loading}>{loading? 'Signing up...':'Signup'}</button>
-            {isError && <p>{ isError}</p>}
+            {error && <p>{ error}</p>}
         </form>
     )
 }
