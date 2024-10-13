@@ -22,7 +22,7 @@ const GameBoard = () => {
         const savedScore = sessionStorage.getItem('score');
         return savedScore ? parseInt(savedScore) : 0;
     });
-
+    const userName=localStorage.getItem('name')
     const navigate = useNavigate();
     
     const handlePacManMove = (newPosition) => {
@@ -65,6 +65,8 @@ const GameBoard = () => {
     return (
         <div className='game-board-container'>
             <UtilsHeader className="utils-header" lives={lives} score={score} />
+            <br />
+            <p>{ userName}</p>
                 <div className='game-board'>
                     {maze.map((row, rowIndex) => (
                         <div key={rowIndex} className='row'>

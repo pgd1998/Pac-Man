@@ -5,7 +5,7 @@ import GameBoardHeader from "../components/headers/GameBoardHeader";
 const UserGamePage = () => {
     return (
         <div>
-            <GameBoardHeader user={ "user"} />
+            <GameBoardHeader />
             <GameBoard/>
         </div>
     )

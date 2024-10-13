@@ -7,10 +7,10 @@ const loginApi = async (loginData) => {
                 "Content-Type": "application/json",
             },
         });
-        return response.data.token;
+        return response.data;
     } catch (error) {
-        if (error.response && error.response.data) {
-            throw new Error(error.response.data||"Failed to login")
+        if (error.response && error.response.data && error.response.data.message) {
+            throw new Error(error.response.data.message||"Failed to login")
         } else {
             throw error;
         }

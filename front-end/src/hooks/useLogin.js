@@ -10,11 +10,16 @@ const useLogin = () => {
             setLoading(true);
             setError('')
             const response = await loginApi(loginData);
-            localStorage.setItem('token', response);
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('name', response.userName)
             return response
-
         } catch (error) {
-            setError('Login Failed. Please try again.')
+            if (error.response && error.response.data && error.response.data.message){
+                setError(error.response.data.message)
+            }
+            else {
+                setError("Login Failed. Please try again.")
+            }
             throw error;
         } finally {
             setLoading(false)
