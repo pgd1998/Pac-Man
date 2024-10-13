@@ -13,9 +13,9 @@ const GameBoard = () => {
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
     const ghostInitialPositions = [
         { x: 5, y: 5, type:'red' },
-        { x: 10, y: 10, type:'green'},
-        { x: 15, y: 15, type: 'blue' },
-        {x:20,y:20,type:'purple'}
+        { x: 6, y: 6, type:'green'},
+        { x: 7, y: 7, type: 'blue' },
+        {x:8,y:8,type:'purple'}
     ]
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
     const [score, setScore] = useState(() => {
@@ -64,7 +64,7 @@ const GameBoard = () => {
 
     return (
         <div className='game-board-container'>
-            <UtilsHeader lives={lives} score={score} />
+            <UtilsHeader className="utils-header" lives={lives} score={score} />
                 <div className='game-board'>
                     {maze.map((row, rowIndex) => (
                         <div key={rowIndex} className='row'>
@@ -77,9 +77,9 @@ const GameBoard = () => {
                             ))}
                         </div>
                     ))}
-                    <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={handlePelletConsumption} onMove={ handlePacManMove} />
+                    <PacMan initialPosition={pacManInitialPosition} maze={maze} setMaze={handlePelletConsumption} onMove={handlePacManMove} />
                     {ghostInitialPositions.map((pos, index) => (
-                        <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos)=>handleGhostMove(index,newPos)} type={pos.type}/>
+                        <Ghost key={index} initialPosition={pos} maze={maze} onMove={(newPos) => handleGhostMove(index, newPos)} type={pos.type} />
                     ))}
                 </div>
         </div>);

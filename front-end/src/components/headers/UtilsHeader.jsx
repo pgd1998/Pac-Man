@@ -1,9 +1,9 @@
 import React from "react";
-import './UtilsHeader.css';
+// import './UtilsHeader.css';
 
-const UtilsHeader = ({ lives,score}) => {
+const UtilsHeader = ({ className,lives,score}) => {
     return (
-        <div className="utils-header">
+        <div className={ className}>
             <div className="lives">Lives: {lives}</div>
             <div className="score">Score: {score}</div>
         </div>

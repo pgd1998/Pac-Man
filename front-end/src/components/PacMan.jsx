@@ -90,9 +90,9 @@ const PacMan = ({initialPosition, maze,setMaze,onMove}) => {
         <div 
             className="pacman"
             style={{
-                top: `${position.y * CELL_SIZE + CELL_SIZE / 2 +10}px`,
-                left: `${position.x * CELL_SIZE + CELL_SIZE / 2 +10}px`
-        }}></div>
+                top: `${position.y * CELL_SIZE + CELL_SIZE / 2}px`,
+                left: `${position.x * CELL_SIZE + CELL_SIZE / 2}px`
+            }}></div>
     )
 }
 

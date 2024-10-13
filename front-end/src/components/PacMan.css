@@ -1,11 +1,9 @@
 .pacman {
-    width: 3%;
-    height: 3%;
+    width: 5%;
+    height: 5%;
     background-image: url('../assets/pacman.png');
     background-size: cover;
     background-repeat: no-repeat;
     position: absolute;
-    top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
 }
