@@ -19,7 +19,7 @@ function App() {
             )
           }
           <Route path='/game' element={<AnonymousGamePage />} />
-          <Route path='user-game' element={ <UserGamePage/>}/>
+          <Route path='/user-game' element={ <UserGamePage/>}/>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/game-over' element={<GameOver/>}/>

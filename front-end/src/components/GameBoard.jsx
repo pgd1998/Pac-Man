@@ -4,10 +4,8 @@ import './GameBoard.css';
 import PacMan from './PacMan';
 import Ghost from './Ghost';
 import { useNavigate } from 'react-router-dom';
-import UtilsHeader from './headers/UtilsHeader';
 
-const GameBoard = () => {
-    const [lives,setLives]=useState(2)
+const GameBoard = ({lives,setLives,score,setScore }) => {
     const [maze, setMaze] = useState(mazeLayout);
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
@@ -18,11 +16,7 @@ const GameBoard = () => {
         {x:8,y:8,type:'purple'}
     ]
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
-    const [score, setScore] = useState(() => {
-        const savedScore = sessionStorage.getItem('score');
-        return savedScore ? parseInt(savedScore) : 0;
-    });
-    const userName=localStorage.getItem('name')
+    
     const navigate = useNavigate();
     
     const handlePacManMove = (newPosition) => {
@@ -64,9 +58,6 @@ const GameBoard = () => {
 
     return (
         <div className='game-board-container'>
-            <UtilsHeader className="utils-header" lives={lives} score={score} />
-            <br />
-            <p>{ userName}</p>
                 <div className='game-board'>
                     {maze.map((row, rowIndex) => (
                         <div key={rowIndex} className='row'>

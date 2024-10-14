@@ -22,7 +22,7 @@ const LoginForm = () => {
             setPassword('')
             // TODO: After success route to Gameboard with a Welcome back message
             if (res){
-                navigate('/user-game')
+                navigate('/game')
             }
         }
         catch {
