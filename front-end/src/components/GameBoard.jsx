@@ -4,6 +4,7 @@ import './GameBoard.css';
 import PacMan from './PacMan';
 import Ghost from './Ghost';
 import { useNavigate } from 'react-router-dom';
+import useUpdate from '../hooks/useUpdate';
 
 const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [maze, setMaze] = useState(mazeLayout);
@@ -44,6 +45,7 @@ const GameBoard = ({ lives, setLives, score, setScore }) => {
                 setLives((prevLives) => {
                     const newLives = prevLives - 1;
                     if (newLives < 0) {
+                        
                         navigate('/game-over');
                     }
                     return newLives;

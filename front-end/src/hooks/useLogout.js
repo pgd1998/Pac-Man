@@ -8,6 +8,8 @@ const useLogout = () => {
         try {
             localStorage.removeItem('token');
             localStorage.removeItem('name');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('high-score');
             if (localStorage.length === 0) {
                 navigate('/')
             }

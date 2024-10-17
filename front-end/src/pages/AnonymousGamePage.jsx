@@ -16,7 +16,7 @@ const AnonymousGamePage = () => {
     return (
         <div className="game-page-container">
             <GameBoardHeader />
-            <UtilsHeader className="utils-header" lives={lives} score={score} userName={userName}/>
+            <UtilsHeader className="utils-header" lives={lives} score={score} userName={userName} highScore={highScore}/>
             
                 <GameBoard className="game-header" lives={lives} setLives={setLives} setScore={setScore} />
         </div>
