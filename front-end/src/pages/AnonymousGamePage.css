@@ -10,6 +10,9 @@
 /* Header styles */
 .game-header,
 .utils-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     width: 100%;
     max-width: 1200px;
     margin-bottom: 10px;
@@ -22,3 +25,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Ensure Lives, Score, and Name have larger fonts */
+.utils-header .lives,
+.utils-header .score,
+.utils-header .userName {
+    font-size: 1.5em;
+    /* Adjust the font size as needed */
+    font-weight: bold;
+    /* Make the text bold */
+}

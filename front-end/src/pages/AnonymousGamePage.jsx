@@ -12,7 +12,7 @@ const AnonymousGamePage = () => {
         return savedScore ? parseInt(savedScore) : 0;
     });
     const userName = localStorage.getItem('name')
-    
+    const highScore=localStorage.getItem('high-score')
     return (
         <div className="game-page-container">
             <GameBoardHeader />

@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import QuitModal from "../modals/QuitModal";
 import HomeModal from "../modals/HomeModal";
 import LogoutModal from "../modals/LogoutModal";
@@ -39,9 +39,29 @@ const GameBoardHeader = () => {
         setIsLogoutModalVisible(false);
     }
     
-    const toggleDropdown = () => {
-        document.getElementById("dropdown-content").classList.toggle("show");
-    };
+    // const toggleDropdown = () => {
+    //     document.getElementById("dropdown-content").classList.toggle("show");
+    // };
+
+    const handleDropdownChange = (event) => {
+        const value = event.target.value;
+        switch (value) {
+            case 'home':
+                openHomeModal();
+                break;
+            case 'quit':
+                openQuitModal();
+                break;
+            case 'guide':
+                // TODO: handle guide
+                break;
+            case 'logout':
+                openLogoutModal();
+                break;
+            default:
+                break;
+        }
+    }
 
     return (
         <div className="game-board-header">
@@ -54,15 +74,20 @@ const GameBoardHeader = () => {
             {isLogoutModalVisible && <LogoutModal onClose={closeLogoutModal} />}
 
             {/* Dropdown for small / medium screens */}
-            <div className="dropdown">
-                <button onClick={toggleDropdown} className="dropbtn">Menu</button>
+            <select className="dropdown" onChange={handleDropdownChange}>
+                {/* <button onClick={toggleDropdown} className="dropbtn">Menu</button>
                 <div id="dropdown-content" className="dropdown-content">
                     <button onClick={openHomeModal}>Home</button>
                     <button onClick={openQuitModal}>Quit</button>
                     <button>Guide</button>
                     {isLoggedIn && <button onClick={openLogoutModal}>Logout</button>}
-                </div>
-            </div>
+                </div> */}
+                <option value="">Menu</option>
+                <option value="home">Home</option>
+                <option value="quit">Quit</option>
+                <option value="guide">Guide</option>
+                {isLoggedIn && <option value="logout">Logout</option>}
+            </select>
         </div>
     )
 }

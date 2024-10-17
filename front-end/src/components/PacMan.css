@@ -1,9 +1,76 @@
 .pacman {
-    width: 5%;
-    height: 5%;
-    background-image: url('../assets/pacman.png');
-    background-size: cover;
-    background-repeat: no-repeat;
+    position: absolute;
+    transition: top 0.25s, left 0.25s;
+    /* Smooth transition for movement */
+    background-color: yellow;
+    /* Example color for Pac-Man */
+    border-radius: 50%;
+    /* Make it circular */
+    box-sizing: border-box;
+}
+
+/* .pacman {
+    width: 40px;
+    height: 40px;
+    background-color: yellow;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    clip-path: circle(50% at 50% 50%);
+    animation: chomp 0.5s infinite linear;
+}
+
+.pacman::before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    width: 10%;
+    height: 10%;
+    background-color: black;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes chomp {
+    0% {
+        clip-path: circle(50% at 50% 50%);
+    }
+
+    25% {
+        clip-path: polygon(50% 0%, 75% 25%, 50% 50%);
+    }
+
+    50% {
+        clip-path: polygon(50% 0%, 100% 25%, 50% 50%);
+    }
+
+    75% {
+        clip-path: polygon(50% 0%, 75% 25%, 50% 50%);
+    }
+
+    100% {
+        clip-path: circle(50% at 50% 50%);
+    }
+} */
+
+/* .pacman {
+    width: 40px;
+    height: 40px;
+    background-color: yellow;
+    border-radius: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
 }
+
+.pacman::before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    width: 10%;
+    height: 10%;
+    background-color: black;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+} */
