@@ -10,12 +10,12 @@ const useLogin = () => {
             setLoading(true);
             setError('')
             const response = await loginApi(loginData);
-            console.log("login response", response)
             localStorage.setItem('token', response.token);
             localStorage.setItem('name', response.userName);
             localStorage.setItem('userId', response.id);
-            localStorage.setItem('high-score',response.highScore)
-            return response
+            localStorage.setItem('high-score', response.highScore);
+            localStorage.setItem('logged-in', 'yes');
+            return response;
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message){
                 setError(error.response.data.message)

@@ -1,11 +1,12 @@
 import React from "react";
 import GameBoardHeader from "../components/headers/GameBoardHeader";
-import GameBoard from "../components/GameBoard";
-import './AnonymousGamePage.css';
+import {GameBoard} from "../components/GameBoard";
+import './GamePage.css';
 import UtilsHeader from "../components/headers/UtilsHeader";
 import '../components/GameBoard.css'
 import { useState } from "react";
-const AnonymousGamePage = () => {
+import WelcomeMsgModal from "../components/modals/WelcomeMsg";
+const GamePage = () => {
     const [lives,setLives]=useState(2)
     const [score, setScore] = useState(() => {
         const savedScore = sessionStorage.getItem('score');
@@ -16,11 +17,12 @@ const AnonymousGamePage = () => {
     return (
         <div className="game-page-container">
             <GameBoardHeader />
-            <UtilsHeader className="utils-header" lives={lives} score={score} userName={userName} highScore={highScore}/>
+            <UtilsHeader className="utils-header" lives={lives} score={score} userName={userName} highScore={highScore} />
             
-                <GameBoard className="game-header" lives={lives} setLives={setLives} setScore={setScore} />
+            <GameBoard className="game-header" lives={lives} setLives={setLives} setScore={setScore} />
+            {/* <WelcomeMsgModal/> */}
         </div>
     );
 }
 
-export default AnonymousGamePage;
+export default GamePage;

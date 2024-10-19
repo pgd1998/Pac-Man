@@ -4,9 +4,9 @@ import './GameBoard.css';
 import PacMan from './PacMan';
 import Ghost from './Ghost';
 import { useNavigate } from 'react-router-dom';
-import useUpdate from '../hooks/useUpdate';
+import WelcomeMsgModal from './modals/WelcomeMsg';
 
-const GameBoard = ({ lives, setLives, score, setScore }) => {
+export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [maze, setMaze] = useState(mazeLayout);
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
@@ -34,8 +34,7 @@ const GameBoard = ({ lives, setLives, score, setScore }) => {
     };
 
     const checkCollisions = (pacmanPos, ghostPosArray) => {
-        const collisionThreshold = 0.5; // Adjust this value as needed
-
+        const collisionThreshold = 0.5; 
         ghostPosArray.forEach((ghostPos) => {
             const distance = Math.sqrt(
                 Math.pow(pacmanPos.x - ghostPos.x, 2) + Math.pow(pacmanPos.y - ghostPos.y, 2)
@@ -51,7 +50,6 @@ const GameBoard = ({ lives, setLives, score, setScore }) => {
                     return newLives;
                 });
 
-                // Only reset positions if there are lives left
                 if (lives > 0) {
                     setPacManPosition(pacManInitialPosition);
                     setGhostPositions(ghostInitialPositions);
@@ -87,6 +85,7 @@ const GameBoard = ({ lives, setLives, score, setScore }) => {
     }, [maze]);
 
     return (
+        
         <div className='game-board-container'>
             <div ref={gameBoardRef} className='game-board'>
                 {maze.map((row, rowIndex) => (
@@ -122,5 +121,3 @@ const GameBoard = ({ lives, setLives, score, setScore }) => {
         </div>
     );
 };
-
-export default GameBoard;

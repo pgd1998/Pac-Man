@@ -10,7 +10,11 @@ const useSignUp = () => {
             setLoading(true);
             setError('')
             const response = await signupApi(signupData);
-            localStorage.setItem('token', response);
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('name', response.userName);
+            localStorage.setItem('userId', response.id);
+            localStorage.setItem('high-score', response.highScore);
+            localStorage.setItem('signed-up','yes')
             return response;
     } catch (error) {
             setError('SignUp failed. Please Try again.')

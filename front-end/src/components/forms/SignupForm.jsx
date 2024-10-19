@@ -15,10 +15,12 @@ const SignupForm = () => {
             password
         }
         try {
-            await signup(signupData);
+            const res=await signup(signupData);
             setName('');
             setPassword('');
-            // TODO: after success route to Gameboard with a Welcome/Thank you message
+            if (res){
+                navigate('/game')
+            }
         } 
         
         catch (error) {

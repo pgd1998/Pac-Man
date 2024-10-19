@@ -8,7 +8,7 @@ const GameOver = () => {
     const navigate = useNavigate();
     const totalScore = sessionStorage.getItem('score');
     const userId = localStorage.getItem('userId');
-    const updateHighScore = useUpdate(); // Call the hook to get the update function
+    const updateHighScore = useUpdate(); 
 
     useEffect(() => {
         const updateScore = async () => {
@@ -17,13 +17,17 @@ const GameOver = () => {
                     highScore: totalScore,
                     userId
                 };
-                await updateHighScore(updateData);
+                const updatedHighScore = await updateHighScore(updateData);
+                console.log(updatedHighScore)
+                localStorage.setItem('high-score', updatedHighScore);
+                console.log(sessionStorage.getItem('score'))
             } catch (error) {
                 console.error("Failed to update high score:", error);
             }
         };
-
-        updateScore();
+        if(userId){
+            updateScore();
+        }
     }, [totalScore, userId,updateHighScore]);
 
     const handleButtonClick = () => {

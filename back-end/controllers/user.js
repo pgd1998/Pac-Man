@@ -12,10 +12,9 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ name, password: hashedPassword });
-        await newUser.save()
-
+        await newUser.save();
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(201).json({ token, user: newUser });
+        res.status(201).json({ token, userName: newUser.name,highScore:newUser.highScore,id:newUser._id });
     } catch (error) {
         res.status(500).json({message:'Server Error',error})
     }
