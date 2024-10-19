@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import signupApi from '../../utils/signupApi';
+import './Login.css'
+import useSignUp from '../../hooks/useSignUp';
+import { useNavigate } from 'react-router';
 const SignupForm = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [isError,setIsError]=useState('')
+    const { signup, loading, error } = useSignUp();
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const signupData = {
@@ -12,28 +15,36 @@ const SignupForm = () => {
             password
         }
         try {
-            setLoading(true);
-            const response = await signupApi(signupData);
-            localStorage.setItem('token',response)
+            const res=await signup(signupData);
             setName('');
             setPassword('');
-            // TODO: after success route to Gameboard with a Welcome/Thank you message
+            if (res){
+                navigate('/game')
+            }
         } 
         
         catch (error) {
-            setIsError("Signup failed. Please try again.");
-        } finally {
-            setLoading(false);
-        }
+            // setIsError("Signup failed. Please try again.");
+        } 
+    }
+    const handleCancelClick = () => {
+        setName('');
+        setPassword('')
+        navigate('/')
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div className='form-container'>
+        <form className='form' onSubmit={handleSubmit}>
             <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' required />
             <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
-            <button type='submit' disabled={loading}>{loading? 'Signing up...':'Signup'}</button>
-            {isError && <p>{ isError}</p>}
-        </form>
+                <div className='button-container'>
+                    <button type='submit' disabled={loading}>{loading ? 'Signing up...' : 'Signup'}</button>
+                    <button type='cancel' onClick={handleCancelClick}>Cancel</button>
+                </div>
+            {error && <p>{ error}</p>}
+            </form>
+            </div>
     )
 }
 

@@ -5,13 +5,13 @@ const HeaderHome = () => {
     const navigate = useNavigate();
 
     const handleButtonClick = (action) => {
-        if (action=='game') {
+        if (action==='game') {
             navigate('/game')
         }
-        else if (action == 'login') {
+        else if (action === 'login') {
             navigate('/login')
         }
-        else if (action == 'signup') {
+        else if (action === 'signup') {
             navigate('/signup')
         }
     }

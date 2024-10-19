@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import loginApi from '../../utils/loginApi';
 import './Login.css'
 import { useNavigate } from 'react-router';
+import useLogin from '../../hooks/useLogin';
+import UserGamePage from '../../pages/UserGamePage';
 
 const LoginForm = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState('');
     const navigate = useNavigate();
+    const {login, loading, error } = useLogin();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const loginData={
@@ -16,18 +17,16 @@ const LoginForm = () => {
             password
         }
         try {
-            setIsLoading(true);
-            const response = await loginApi(loginData);
-            localStorage.setItem('token', response);
+            const res = await login(loginData);
             setName('');
             setPassword('')
             // TODO: After success route to Gameboard with a Welcome back message
+            if (res){
+                navigate('/game')
+            }
         }
         catch {
-            setIsError("Login failed Try again.")
-        }
-        finally {
-            setIsLoading(false);
+            // setIsError("Login failed Try again.")
         }
     }
 
@@ -38,15 +37,15 @@ const LoginForm = () => {
     }
 
     return (
-        <div className='login-form-container'>
-            <form className="login-form" onSubmit={handleSubmit}>
+        <div className='form-container'>
+            <form className="form" onSubmit={handleSubmit}>
                 <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' required />
                 <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
                 <div className='button-container'>
-                    <button type='submit' disabled={isLoading}>{isLoading ? 'Logging in...' : 'Login'}</button>
+                    <button type='submit' disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
                     <button type='cancel' onClick={handleCancelClick}>Cancel</button>
                 </div>
-                {isError && <p>{isError }</p>}
+                {error && <p>{error }</p>}
             </form>
         </div>
     )

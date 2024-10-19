@@ -1,4 +1,3 @@
-import ClearScore from "../ClearScore"
 import { useNavigate } from "react-router";
 import './Modal.css';
 const QuitModal = ({onClose}) => {
@@ -12,7 +11,7 @@ const QuitModal = ({onClose}) => {
     
     return (
         <div className="modal-backdrop">
-            <div className="quit-modal">
+            <div className="modal">
                 <p>Are You sure you want to exit the game?</p>
                 <button onClick={handleButtonClick}>Yes</button>
                 <button onClick={onClose}>No</button>

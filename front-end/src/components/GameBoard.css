@@ -1,74 +1,76 @@
-/* Container for the game board */
-/* .game-board-container {
+/* .game-page-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     width: 100vw;
     height: 100vh;
-    background-color: #000;
     box-sizing: border-box;
+    position: relative;
+    padding-top: 60px;
+    
 } */
 
-/* Game board */
+/* Container for the top header */
+/* .header-container {
+    width: 100%;
+    z-index: 10;
+} */
+
+/* Container for the game board and UtilsHeader */
+.game-board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100vh - 220px);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
 .game-board {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 90vw;
-    /* Use viewport width for responsiveness */
-    height: 90vh;
-    /* Use viewport height for responsiveness */
+    width: 100vw;
+    height: 100vh;
     max-width: 700px;
-    /* Maximum width to maintain aspect ratio */
     max-height: 620px;
-    /* Maximum height to maintain aspect ratio */
-    /* background-color: #000; */
-    /* Black background for the game board */
-    border: 10px solid #000;
-    /* Border to match the classic Pac-Man look */
     box-sizing: border-box;
-    /* Include border in the element's total width and height */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    /* Add some shadow for depth */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .row {
     display: flex;
     width: 100%;
-    /* Ensure rows take full width of the game board */
 }
 
 .cell {
     flex: 1;
-    /* Make cells flexible to fit the row */
     position: relative;
-    /* Ensure child elements are positioned relative to the cell */
     aspect-ratio: 1 / 1;
-    /* Maintain square aspect ratio */
+    padding: 0;
+    /* Ensure no padding to avoid misalignment */
 }
 
 .wall {
     background-color: #2e2d2d;
-    border: 2px solid #000;
-    /* Add border to walls for better visibility */
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-    /* Add inner shadow for depth */
+    /* border: 0.5px solid #000; */
+    /* box-shadow: inset 0 0 0.1px rgba(0, 0, 0, 0.5); */
 }
 
 .path {
     background-color: #000;
-    /* Paths are black */
 }
 
 .pellet {
     width: 20%;
-    /* Use percentage for responsiveness */
     height: 20%;
-    /* Use percentage for responsiveness */
     background-color: #ffb8ae;
-    /* Light pink color for pellets */
     border-radius: 50%;
     margin: auto;
     position: absolute;
@@ -79,11 +81,8 @@
 
 .power-pellet {
     width: 40%;
-    /* Use percentage for responsiveness */
     height: 40%;
-    /* Use percentage for responsiveness */
     background-color: #ffb8ae;
-    /* Light pink color for power pellets */
     border-radius: 50%;
     margin: auto;
     position: absolute;
@@ -91,28 +90,19 @@
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 10px #ffb8ae;
-    /* Glow effect for power pellets */
 }
 
 .ghost-house {
     background-color: #000;
-    /* Ghost house background */
     border: 2px dashed #ff0000;
-    /* Red dashed border for ghost house */
     box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.5);
-    /* Inner shadow for depth */
 }
 
-/* Media query for smaller screens */
 @media (max-width: 600px) {
     .game-board {
         width: 100vw;
-        /* Full viewport width */
         height: 100vh;
-        /* Full viewport height */
         max-width: none;
-        /* Remove max-width constraint */
         max-height: none;
-        /* Remove max-height constraint */
     }
 }

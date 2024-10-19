@@ -3,10 +3,11 @@ import './App.css';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HeaderHome from './components/headers/HomeHeader';
-import AnonymousGamePage from './pages/AnonymousGamePage';
+import GamePage from './pages/GamePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import GameOver from './pages/GameOverPage';
+import UserGamePage from './pages/UserGamePage';
 function App() {
   return (
     <div className="App">
@@ -17,7 +18,8 @@ function App() {
               <Route key={ index} path={path} element={<Home/>}/>
             )
           }
-          <Route path='/game' element={<AnonymousGamePage />} />
+          <Route path='/game' element={<GamePage />} />
+          <Route path='/user-game' element={ <UserGamePage/>}/>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/game-over' element={<GameOver/>}/>
