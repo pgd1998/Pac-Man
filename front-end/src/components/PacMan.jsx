@@ -214,7 +214,7 @@ const PacMan = ({ initialPosition, maze, setMaze, onMove, gameBoardRef, lives })
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
-        const interval = setInterval(movePacMan, 250);
+        const interval = setInterval(movePacMan, 150);
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             clearInterval(interval);

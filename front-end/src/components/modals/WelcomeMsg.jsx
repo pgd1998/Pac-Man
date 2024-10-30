@@ -102,11 +102,10 @@ const WelcomeMsgModal = () => {
                     {loggedIn && <span>Welcome Back <strong>{userName}</strong>!</span>}
                     {signedUp && !loggedIn && <span>Welcome <strong>{userName}</strong>. Enjoy the game!</span>}
                     <button onClick={handleCancel}>×</button>
-                    </div>
-                    </div>
+                </div>
+            </div>
             )}
-                
-                </>
+        </>
     );
 };
 

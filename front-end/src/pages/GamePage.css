@@ -1,13 +1,12 @@
-/* Ensure the header and gameboard are properly spaced */
 .game-page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
-/* Header styles */
 .game-header,
 .utils-header {
     display: flex;
@@ -26,13 +25,10 @@
     flex-shrink: 0;
 }
 
-/* Ensure Lives, Score, and Name have larger fonts */
 .utils-header .lives,
 .utils-header .score,
 .utils-header .userName,
-.utils-header .high-score {
+.utils-header .highScore {
     font-size: 1.5em;
-    /* Adjust the font size as needed */
     font-weight: bold;
-    /* Make the text bold */
 }

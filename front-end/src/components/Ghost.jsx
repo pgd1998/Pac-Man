@@ -10,8 +10,6 @@ const Ghost = ({ initialPosition, maze, onMove, type, gameBoardRef }) => {
     const [direction, setDirection] = useState(getRandomDirection());
     const [cellSize, setCellSize] = useState(0);
 
-    
-
     useEffect(() => {
         const calculateCellSize = () => {
             if (gameBoardRef.current) {

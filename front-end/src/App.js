@@ -1,13 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HeaderHome from './components/headers/HomeHeader';
 import GamePage from './pages/GamePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import GameOver from './pages/GameOverPage';
 import UserGamePage from './pages/UserGamePage';
+
 function App() {
   return (
     <div className="App">
@@ -19,6 +18,7 @@ function App() {
             )
           }
           <Route path='/game' element={<GamePage />} />
+          {/* TODO: Not using /user-game, it is just /game for everything */}
           <Route path='/user-game' element={ <UserGamePage/>}/>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />

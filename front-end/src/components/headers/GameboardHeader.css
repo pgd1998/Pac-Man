@@ -5,14 +5,10 @@
     align-items: center;
     padding: 10px;
     background-color: #3a3f47;
-    /* Background color */
-    color: white;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
     margin-bottom: 10px;
-    /* Space below the header */
     flex-wrap: wrap;
-    /* Allow wrapping of items */
 }
 
 .game-board-header button {
@@ -26,52 +22,44 @@
 
 .game-board-header .home-button {
     background-color: #61dafb;
-    /* Home button color */
 }
 
 .game-board-header .home-button:hover {
     background-color: #21a1f1;
-    /* Home button hover color */
 }
 
 .game-board-header .quit-button {
     background-color: #ff6b6b;
-    /* Quit button color */
 }
 
 .game-board-header .quit-button:hover {
     background-color: #ff4c4c;
-    /* Quit button hover color */
 }
 
 .game-board-header .guide-button {
     background-color: #feca57;
-    /* Guide button color */
 }
 
 .game-board-header .guide-button:hover {
     background-color: #f0b429;
-    /* Guide button hover color */
 }
 
 .game-board-header .logout-button {
     background-color: #48dbfb;
-    /* Logout button color */
 }
 
 .game-board-header .logout-button:hover {
     background-color: #1dd1a1;
-    /* Logout button hover color */
 }
 
 /* Dropdown Menu */
 .dropdown {
+    /* Hide by default */
     display: none;
     padding: 10px;
     font-size: 1em;
     border-radius: 5px;
     cursor: pointer;
-    /* Hide by default */
 }
 
 .dropdown-content {

@@ -4,7 +4,6 @@ import './GameBoard.css';
 import PacMan from './PacMan';
 import Ghost from './Ghost';
 import { useNavigate } from 'react-router-dom';
-import WelcomeMsgModal from './modals/WelcomeMsg';
 
 export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [maze, setMaze] = useState(mazeLayout);
@@ -44,7 +43,6 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                 setLives((prevLives) => {
                     const newLives = prevLives - 1;
                     if (newLives < 0) {
-                        
                         navigate('/game-over');
                     }
                     return newLives;
@@ -67,25 +65,25 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
         setMaze(newMaze);
     };
 
-    useEffect(() => {
-        const calculateCellSize = () => {
-            if (gameBoardRef.current) {
-                const gameBoardWidth = gameBoardRef.current.clientWidth;
-                const gameBoardHeight = gameBoardRef.current.clientHeight;
-                const rows = maze.length;
-                const cols = maze[0].length;
-                const size = Math.min(gameBoardWidth / cols, gameBoardHeight / rows);
-                document.documentElement.style.setProperty('--cell-size', `${size}px`);
-            }
-        };
+    // useEffect(() => {
+    //     const calculateCellSize = () => {
+    //         if (gameBoardRef.current) {
+    //             const gameBoardWidth = gameBoardRef.current.clientWidth;
+    //             const gameBoardHeight = gameBoardRef.current.clientHeight;
+    //             const rows = maze.length;
+    //             const cols = maze[0].length;
+    //             const size = Math.min(gameBoardWidth / cols, gameBoardHeight / rows);
+    //             document.documentElement.style.setProperty('--cell-size', `${size}px`);
+    //         }
+    //     };
 
-        calculateCellSize();
-        window.addEventListener('resize', calculateCellSize);
-        return () => window.removeEventListener('resize', calculateCellSize);
-    }, [maze]);
+    //     calculateCellSize();
+    //     window.addEventListener('resize', calculateCellSize);
+    //     return () => window.removeEventListener('resize', calculateCellSize);
+    // }, [maze]);
+
 
     return (
-        
         <div className='game-board-container'>
             <div ref={gameBoardRef} className='game-board'>
                 {maze.map((row, rowIndex) => (
@@ -105,7 +103,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                     setMaze={handlePelletConsumption}
                     onMove={handlePacManMove}
                     gameBoardRef={gameBoardRef}
-                    lives={lives} // Pass the lives prop
+                    lives={lives} 
                 />
                 {ghostInitialPositions.map((pos, index) => (
                     <Ghost

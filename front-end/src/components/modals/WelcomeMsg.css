@@ -49,6 +49,10 @@
     color: #888;
     background: none;
     border: none;
+    position: absolute;
+    top: 10px;
+        /* Adjust as needed */
+        right: 10px;
 }
 
 .message-container button:hover {
