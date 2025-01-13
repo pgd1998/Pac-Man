@@ -48,7 +48,7 @@ export const logout = async (req, res) => {
 
 export const update = async (req, res) => {
     const { userId, highScore } = req.body;
-    console.log("Received update request:", req.body); // Add logging
+    
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -64,3 +64,4 @@ export const update = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error });
     }
 }
+
