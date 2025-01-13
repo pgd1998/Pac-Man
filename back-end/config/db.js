@@ -9,7 +9,7 @@ const connectDB = async ()=>{
         await connect(process.env.MONGO_URI);
         console.log("Mongodb connected...")
     } catch (error) {
-        console.error( "Database not connected" )
+        console.error( "Database not connected",error.message )
         process.exit(1)
     }
 }
