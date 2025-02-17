@@ -17,7 +17,6 @@ const Home = () => {
                 <br/>
                 Developed by Poorvith Gowda
             </p>
-            
         </div>
     );
 }

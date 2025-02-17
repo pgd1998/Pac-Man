@@ -12,6 +12,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [pacManDirection, setPacManDirection] = useState('right');
     const [gameMode, setGameMode] = useState('chase'); // 'chase' or 'frightened'
     const [frightenedTimer, setFrightenedTimer] = useState(null);
+    const [showLifeLost, setShowLifeLost] = useState(false);
     
     const ghostInitialPositions = [
         { x: 5, y: 5, type: 'blinky', color: 'red' },
@@ -59,7 +60,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     };
 
     const checkCollisions = (pacmanPos, ghostPosArray) => {
-        const collisionThreshold = 0.2;
+        const collisionThreshold = 0.5;
         ghostPosArray.forEach((ghostPos) => {
             const distance = Math.sqrt(
                 Math.pow(pacmanPos.x - ghostPos.x, 2) + Math.pow(pacmanPos.y - ghostPos.y, 2)
@@ -85,12 +86,16 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                         return newLives;
                     });
 
-                    if (lives > -1) {
-                        setPacManPosition(pacManInitialPosition);
-                        setGhostPositions(ghostInitialPositions);
-                        setPacManDirection('right');
-                        setGameMode('chase');
-                        if (frightenedTimer) clearTimeout(frightenedTimer);
+                    if (lives > 0) {
+                        setShowLifeLost(true);
+                        setTimeout(() => {
+                            setShowLifeLost(false);
+                            setPacManPosition(pacManInitialPosition);
+                            setGhostPositions(ghostInitialPositions);
+                            setPacManDirection('right');
+                            setGameMode('chase');
+                            if (frightenedTimer) clearTimeout(frightenedTimer);
+                        }, 2000); // 2 seconds pause
                     }
                 }
             }
@@ -128,6 +133,11 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                         ))}
                     </div>
                 ))}
+                {showLifeLost && (
+                    <div className="life-lost-overlay">
+                        <p>Life Lost! Remaining Lives: {lives}</p>
+                    </div>
+                )}
                 <PacMan
                     initialPosition={pacManInitialPosition}
                     maze={maze}

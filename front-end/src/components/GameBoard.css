@@ -178,3 +178,18 @@
     text-shadow: 0 0 20px rgba(255, 184, 174, 0.8);
     z-index: 1000;
 }
+
+/* Add this CSS for the life lost overlay */
+.life-lost-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    font-size: 24px;
+}
