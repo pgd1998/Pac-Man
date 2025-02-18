@@ -10,7 +10,8 @@ const Ghost = ({
     pacmanPosition,
     pacmanDirection,
     blinkyPosition,
-    gameMode = 'chase' // 'chase' or 'frightened'
+    gameMode = 'chase', // 'chase' or 'frightened'
+    gameStarted
 }) => {
     const [position, setPosition] = useState(initialPosition);
     const [cellSize, setCellSize] = useState(0);
@@ -220,6 +221,8 @@ const Ghost = ({
 
     // Move the ghost based on the calculated direction
     const moveGhost = () => {
+        if (!gameStarted) return; // Prevent movement if the game hasn't started
+
         const newDirection = calculateGhostMove();
         let newX = position.x;
         let newY = position.y;
@@ -257,7 +260,7 @@ const Ghost = ({
     useEffect(() => {
         const interval = setInterval(moveGhost, gameMode === 'frightened' ? 400 : 300);
         return () => clearInterval(interval);
-    }, [direction, position, gameMode]);
+    }, [direction, position, gameMode,gameStarted]);
 
     return (
         <div

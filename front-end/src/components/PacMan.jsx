@@ -7,7 +7,8 @@ const PacMan = ({
     setMaze, 
     onMove, 
     gameBoardRef, 
-    lives 
+    lives,
+    gameStarted 
 }) => {
     const [position, setPosition] = useState(initialPosition);
     const [direction, setDirection] = useState(null);
@@ -73,6 +74,7 @@ const PacMan = ({
     }, [direction]);
 
     const movePacMan = useCallback(() => {
+        if (!gameStarted) return;
         console.log('Moving PacMan'); // Debugging log
         let newX = position.x;
         let newY = position.y;
@@ -153,7 +155,7 @@ const PacMan = ({
                 setMaze(newMaze, 50); // Power pellet points
             }
         }
-    }, [direction, maze, onMove, position, isValidMove, setMaze]);
+    }, [direction, maze, onMove, position, isValidMove, setMaze,gameStarted]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);

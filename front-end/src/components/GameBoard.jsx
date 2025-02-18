@@ -14,7 +14,9 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [frightenedTimer, setFrightenedTimer] = useState(null);
     const [showLifeLost, setShowLifeLost] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
-    
+    const [countdown, setCountdown] = useState(3); // State for countdown
+    const [gameStarted, setGameStarted] = useState(false);
+
     const ghostInitialPositions = [
         { x: 5, y: 5, type: 'blinky', color: 'red' },
         { x: 6, y: 6, type: 'pinky', color: 'pink' },
@@ -40,7 +42,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     };
 
     const handlePacManMove = (newPosition, direction) => {
-        if (!isResetting) {
+        if (!isResetting && gameStarted) {
             setPacManPosition(newPosition);
             setPacManDirection(direction);
             checkCollisions(newPosition, ghostPositions);
@@ -66,7 +68,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     };
 
     const handleGhostMove = (index, newPosition) => {
-        if (!isResetting && !showLifeLost) {
+        if (!isResetting && !showLifeLost && gameStarted) {
             const newGhostPositions = [...ghostPositions];
             newGhostPositions[index] = { ...newGhostPositions[index], ...newPosition };
             setGhostPositions(newGhostPositions);
@@ -122,7 +124,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     };
 
     const handlePelletConsumption = (newMaze, points) => {
-        if (!isResetting) {
+        if (!isResetting && gameStarted) {
             setScore((prevScore) => {
                 const newScore = prevScore + points;
                 sessionStorage.setItem('score', newScore);
@@ -138,8 +140,25 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
         };
     }, [frightenedTimer]);
 
+    // Countdown logic
+    useEffect(() => {
+        if (countdown > 0) {
+            const timer = setTimeout(() => {
+                setCountdown(countdown - 1);
+            }, 1000);
+            return () => clearTimeout(timer);
+        } else {
+            setGameStarted(true);
+        }
+    }, [countdown]);
+
     return (
         <div className='game-board-container'>
+            {!gameStarted && (
+                <div className="countdown-overlay">
+                    <div className="countdown">{countdown}</div>
+                </div>
+            )}
             <div ref={gameBoardRef} className='game-board'>
                 {maze.map((row, rowIndex) => (
                     <div key={rowIndex} className='row'>
@@ -166,21 +185,22 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                     onMove={handlePacManMove}
                     gameBoardRef={gameBoardRef}
                     lives={lives}
+                    gameStarted={gameStarted}
                 />
                 {ghostPositions.map((pos, index) => (
                     <Ghost
-                    // key={`${pos.type}-${pos.x}-${pos.y}`} // Add a unique key to force re-render
-                    key={index}
-                    initialPosition={pos}
-                    maze={maze}
-                    onMove={(newPos) => handleGhostMove(index, newPos)}
-                    type={pos.type}
-                    gameBoardRef={gameBoardRef}
-                    pacmanPosition={pacManPosition}
-                    pacmanDirection={pacManDirection}
-                    blinkyPosition={ghostPositions[0]}
-                    gameMode={gameMode}
-                />
+                        key={index}
+                        initialPosition={pos}
+                        maze={maze}
+                        onMove={(newPos) => handleGhostMove(index, newPos)}
+                        type={pos.type}
+                        gameBoardRef={gameBoardRef}
+                        pacmanPosition={pacManPosition}
+                        pacmanDirection={pacManDirection}
+                        blinkyPosition={ghostPositions[0]}
+                        gameMode={gameMode}
+                        gameStarted={gameStarted} // Pass gameStarted to Ghost component
+                    />
                 ))}
             </div>
         </div>
