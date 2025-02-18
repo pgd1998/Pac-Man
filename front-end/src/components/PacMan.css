@@ -3,7 +3,10 @@
     background: yellow;
     border-radius: 50%;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+    /* Use the below transition for smooth movement of pacman */
+    /* transition: top 0.2s linear, left 0.2s linear, transform 0.2s linear; */
     transition: transform 0.2s linear;
+
 }
 
 .pacman.moving {

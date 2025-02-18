@@ -10,9 +10,10 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
     const [pacManDirection, setPacManDirection] = useState('right');
-    const [gameMode, setGameMode] = useState('chase'); // 'chase' or 'frightened'
+    const [gameMode, setGameMode] = useState('chase');
     const [frightenedTimer, setFrightenedTimer] = useState(null);
     const [showLifeLost, setShowLifeLost] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
     
     const ghostInitialPositions = [
         { x: 5, y: 5, type: 'blinky', color: 'red' },
@@ -21,45 +22,73 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
         { x: 8, y: 8, type: 'clyde', color: 'orange' }
     ];
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
-    const gameBoardRef = useRef(null);
+    const gameBoardRef = useRef(null);// Reference to the game board element
     const navigate = useNavigate();
 
+    // Function to reset positions of PacMan and ghosts
+    const resetPositions = () => {
+        setIsResetting(true);
+        setPacManPosition(pacManInitialPosition);
+        setGhostPositions([...ghostInitialPositions]);
+        setPacManDirection('right');
+        setGameMode('chase');
+        if (frightenedTimer) clearTimeout(frightenedTimer);
+        
+        setTimeout(() => {
+            setIsResetting(false);
+        }, 10);
+    };
+
     const handlePacManMove = (newPosition, direction) => {
-        setPacManPosition(newPosition);
-        setPacManDirection(direction);
-        checkCollisions(newPosition, ghostPositions);
-        checkPowerPellet(newPosition);
+        if (!isResetting) {
+            setPacManPosition(newPosition);
+            setPacManDirection(direction);
+            checkCollisions(newPosition, ghostPositions);
+            checkPowerPellet(newPosition);
+        }
     };
 
     const checkPowerPellet = (position) => {
-        if (maze[position.y][position.x] === 3) { // 3 represents a power pellet
+        if (maze[position.y][position.x] === 3) {
             setGameMode('frightened');
-            
             if (frightenedTimer) clearTimeout(frightenedTimer);
-
+            
             const timer = setTimeout(() => {
                 setGameMode('chase');
-            }, 10000); // 10 seconds of frightened mode
+            }, 10000);
             setFrightenedTimer(timer);
             
-            // Update maze to remove eaten power pellet
             const newMaze = [...maze];
             newMaze[position.y][position.x] = 0;
             setMaze(newMaze);
-            
-            // Add points for power pellet
             setScore(prev => prev + 50);
         }
     };
 
     const handleGhostMove = (index, newPosition) => {
-        const newGhostPositions = [...ghostPositions];
-        newGhostPositions[index] = { ...newGhostPositions[index], ...newPosition };
-        setGhostPositions(newGhostPositions);
-        checkCollisions(pacManPosition, newGhostPositions);
+        if (!isResetting && !showLifeLost) {
+            const newGhostPositions = [...ghostPositions];
+            newGhostPositions[index] = { ...newGhostPositions[index], ...newPosition };
+            setGhostPositions(newGhostPositions);
+            checkCollisions(pacManPosition, newGhostPositions);
+        }
+    };
+
+    const handleLifeLost = () => {
+        setShowLifeLost(true);
+        resetPositions();
+        
+        setTimeout(() => {
+            setShowLifeLost(false);
+        }, 200);
     };
 
     const checkCollisions = (pacmanPos, ghostPosArray) => {
+        if (isResetting) return;
+        {/*Collision Threshold: A threshold value (0.5) is defined to determine 
+            when a collision is considered to have occurred.
+        Distance Calculation: For each ghost, the Euclidean distance between 
+        PacMan's position (pacmanPos) and the ghost's position (ghostPos) is calculated. */}
         const collisionThreshold = 0.5;
         ghostPosArray.forEach((ghostPos) => {
             const distance = Math.sqrt(
@@ -74,41 +103,33 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                         const newGhostPositions = [...ghostPositions];
                         newGhostPositions[index] = { ...ghostInitialPositions[index] };
                         setGhostPositions(newGhostPositions);
-                        setScore(prev => prev + 200); // Points for eating a ghost
+                        setScore(prev => prev + 200);
                     }
                 } else {
                     // Pac-Man is caught
-                    setLives((prevLives) => {
+                    setLives(prevLives => {
                         const newLives = prevLives - 1;
                         if (newLives < 0) {
                             navigate('/game-over');
+                            return 0;
                         }
+                        handleLifeLost();
                         return newLives;
                     });
-
-                    if (lives > 0) {
-                        setShowLifeLost(true);
-                        setTimeout(() => {
-                            setShowLifeLost(false);
-                            setPacManPosition(pacManInitialPosition);
-                            setGhostPositions(ghostInitialPositions);
-                            setPacManDirection('right');
-                            setGameMode('chase');
-                            if (frightenedTimer) clearTimeout(frightenedTimer);
-                        }, 2000); // 2 seconds pause
-                    }
                 }
             }
         });
     };
 
     const handlePelletConsumption = (newMaze, points) => {
-        setScore((prevScore) => {
-            const newScore = prevScore + points;
-            sessionStorage.setItem('score', newScore);
-            return newScore;
-        });
-        setMaze(newMaze);
+        if (!isResetting) {
+            setScore((prevScore) => {
+                const newScore = prevScore + points;
+                sessionStorage.setItem('score', newScore);
+                return newScore;
+            });
+            setMaze(newMaze);
+        }
     };
 
     useEffect(() => {
@@ -148,17 +169,18 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                 />
                 {ghostPositions.map((pos, index) => (
                     <Ghost
-                        key={index}
-                        initialPosition={pos}
-                        maze={maze}
-                        onMove={(newPos) => handleGhostMove(index, newPos)}
-                        type={pos.type}
-                        gameBoardRef={gameBoardRef}
-                        pacmanPosition={pacManPosition}
-                        pacmanDirection={pacManDirection}
-                        blinkyPosition={ghostPositions[0]} // First ghost is Blinky
-                        gameMode={gameMode}
-                    />
+                    // key={`${pos.type}-${pos.x}-${pos.y}`} // Add a unique key to force re-render
+                    key={index}
+                    initialPosition={pos}
+                    maze={maze}
+                    onMove={(newPos) => handleGhostMove(index, newPos)}
+                    type={pos.type}
+                    gameBoardRef={gameBoardRef}
+                    pacmanPosition={pacManPosition}
+                    pacmanDirection={pacManDirection}
+                    blinkyPosition={ghostPositions[0]}
+                    gameMode={gameMode}
+                />
                 ))}
             </div>
         </div>
