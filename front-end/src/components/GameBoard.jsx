@@ -17,6 +17,8 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [countdown, setCountdown] = useState(3); // State for countdown
     const [gameStarted, setGameStarted] = useState(false);
 
+
+    
     const ghostInitialPositions = [
         { x: 5, y: 5, type: 'blinky', color: 'red' },
         { x: 6, y: 6, type: 'pinky', color: 'pink' },
