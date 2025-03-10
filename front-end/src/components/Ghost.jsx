@@ -55,21 +55,6 @@ const Ghost = ({
         return y >= 0 && y < maze.length && x >= 0 && x < maze[0].length && maze[y][x] !== 1;
     }, [maze]);
 
-    // Get a random direction, optionally excluding a specific direction
-    const getRandomDirection = useCallback((currentPos, excludeDirection) => {
-        const possibleDirs = getPossibleDirections(currentPos);
-        if (excludeDirection) {
-            const filteredDirs = possibleDirs.filter(dir => dir !== excludeDirection);
-            return filteredDirs[Math.floor(Math.random() * filteredDirs.length)] || possibleDirs[0];
-        }
-        return possibleDirs[Math.floor(Math.random() * possibleDirs.length)];
-    }, [getPossibleDirections]);
-
-    // Calculate the Euclidean distance between two positions
-    const calculateDistance = (pos1, pos2) => {
-        return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
-    };
-
     // Get all possible directions the ghost can move from a given position
     const getPossibleDirections = useCallback((pos) => {
         const directions = [];
@@ -91,6 +76,21 @@ const Ghost = ({
         return directions;
     }, [isValidMove]);
 
+    // Get a random direction, optionally excluding a specific direction
+    const getRandomDirection = useCallback((currentPos, excludeDirection) => {
+        const possibleDirs = getPossibleDirections(currentPos);
+        if (excludeDirection) {
+            const filteredDirs = possibleDirs.filter(dir => dir !== excludeDirection);
+            return filteredDirs[Math.floor(Math.random() * filteredDirs.length)] || possibleDirs[0];
+        }
+        return possibleDirs[Math.floor(Math.random() * possibleDirs.length)];
+    }, [getPossibleDirections]);
+
+    // Calculate the Euclidean distance between two positions
+    const calculateDistance = (pos1, pos2) => {
+        return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+    };
+
     // Get the opposite direction of a given direction
     const getOppositeDirection = (dir) => {
         const opposites = {
@@ -103,7 +103,7 @@ const Ghost = ({
     };
 
     // Get the best direction to move towards a target position
-    const getBestDirection = (currentPos, targetPos) => {
+    const getBestDirection = useCallback((currentPos, targetPos) => {
         const possibleDirs = getPossibleDirections(currentPos);
         const moves = {
             up: { x: 0, y: -1 },
@@ -137,7 +137,7 @@ const Ghost = ({
         });
 
         return bestDir;
-    };
+    }, [direction, getPossibleDirections]);
 
     // Calculate the next move for the ghost based on the game mode and PacMan's position
     const calculateGhostMove = useCallback(() => {
@@ -217,7 +217,7 @@ const Ghost = ({
         }
 
         return getBestDirection(position, targetPos);
-    }, [gameMode, getPossibleDirections, getRandomDirection, pacmanDirection, position, type, blinkyPosition]);
+    }, [gameMode, getPossibleDirections, getRandomDirection, pacmanDirection, position, type, blinkyPosition, cornerPositions.clyde, direction, getBestDirection]);
 
     // Move the ghost based on the calculated direction
     const moveGhost = useCallback(() => {
