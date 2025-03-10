@@ -254,7 +254,7 @@ const Ghost = ({
             const newRandomDirection = getRandomDirection(position, getOppositeDirection(direction));
             setDirection(newRandomDirection);
         }
-    }, [gameStarted, calculateGhostMove, position, direction, maze, onMove]);
+    }, [gameStarted, calculateGhostMove, position, direction, maze, onMove,getRandomDirection,isValidMove]);
 
 
     // Set an interval to move the ghost periodically
