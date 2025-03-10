@@ -1,11 +1,26 @@
 .pacman {
     position: absolute;
-    transition: top 0.25s, left 0.25s;
-    /* Smooth transition for movement */
-    background-color: yellow;
-    /* Example color for Pac-Man */
+    background: yellow;
     border-radius: 50%;
-    /* Make it circular */
-    box-sizing: border-box;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+    /* Use the below transition for smooth movement of pacman */
+    /* transition: top 0.2s linear, left 0.2s linear, transform 0.2s linear; */
+    transition: transform 0.2s linear;
+
 }
 
+.pacman.moving {
+    animation: eat 0.2s linear infinite;
+}
+
+@keyframes eat {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+    }
+    50% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 85%, 15% 50%, 0 15%);
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+    }
+}

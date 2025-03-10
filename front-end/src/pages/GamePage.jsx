@@ -7,7 +7,7 @@ import UtilsHeader from "../components/headers/UtilsHeader";
 import WelcomeMsgModal from "../components/modals/WelcomeMsg";
 
 const GamePage = () => {
-    const [lives, setLives] = useState(2);
+    const [lives, setLives] = useState(3);
     const [score, setScore] = useState(() => {
         const savedScore = sessionStorage.getItem('score');
         return savedScore ? parseInt(savedScore) : 0;
