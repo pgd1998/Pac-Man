@@ -32,27 +32,30 @@ connectDB();
 // Middleware setup
 app.use(express.json());
 
-// CORS configuration
+// CORS configuration for production
 app.use(cors({
-  origin: '*', // Consider restricting this in production
+  // Change this to your frontend URL when you know it
+  // For development, using wildcard
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true,
   optionsSuccessStatus: 200,
 }));
 
-// API routes
-app.use("/users", userRoutes); // Remove the /api prefix here, as Vercel adds it
+// API routes - IMPORTANT: Keep the /api prefix for consistency with your frontend
+app.use("/api/users", userRoutes);
 
 // Health check route
-app.get("/health", (req, res) => { // Also remove /api prefix here
+app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const port = process.env.PORT || 5002;
-  app.listen(port, () => {
-    console.log(`Server is running at ${port}`);
-  });
-}
+// Define port - Render will set process.env.PORT
+const PORT = process.env.PORT || 5002;
 
-// Export as middleware
+// Start the server - THIS IS IMPORTANT FOR RENDER
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+// Also export the app for testing purposes if needed
 export default app;
