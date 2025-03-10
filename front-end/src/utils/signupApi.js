@@ -1,3 +1,6 @@
+import apiClient from "./apiClient";
+
+
 const signupApi = async (signupData) => {
     try {
         const response = await apiClient.post('/api/users/sign-up', signupData);
