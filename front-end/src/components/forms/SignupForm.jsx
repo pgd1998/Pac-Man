@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css'
-import useSignUp from '../../hooks/useSignUp';
+import useSignUp from '../../hooks/useSignUp.js';
 import { useNavigate } from 'react-router';
 const SignupForm = () => {
     const [name, setName] = useState('');

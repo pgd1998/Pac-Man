@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import QuitModal from "../modals/QuitModal";
-import HomeModal from "../modals/HomeModal";
-import LogoutModal from "../modals/LogoutModal";
+import QuitModal from "../modals/QuitModal.jsx";
+import HomeModal from "../modals/HomeModal.jsx";
+import LogoutModal from "../modals/LogoutModal.jsx";
 import './GameboardHeader.css';
 
 const GameBoardHeader = () => {

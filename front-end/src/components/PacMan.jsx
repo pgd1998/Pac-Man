@@ -1,5 +1,23 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import './PacMan.css';
+
+const initialState = (initialPosition) => ({
+    position: initialPosition,
+    direction: null,
+});
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_POSITION':
+            return { ...state, position: action.payload };
+        case 'SET_DIRECTION':
+            return { ...state, direction: action.payload };
+        case 'RESET':
+            return initialState(action.payload);
+        default:
+            return state;
+    }
+};
 
 const PacMan = ({ 
     initialPosition, 
@@ -10,8 +28,8 @@ const PacMan = ({
     lives,
     gameStarted 
 }) => {
-    const [position, setPosition] = useState(initialPosition);
-    const [direction, setDirection] = useState(null);
+    const [state, dispatch] = useReducer(reducer, initialPosition, initialState);
+    const { position, direction } = state;
     const [cellSize, setCellSize] = useState(0);
 
     useEffect(() => {
@@ -32,46 +50,33 @@ const PacMan = ({
     }, [maze, gameBoardRef]);
 
     useEffect(() => {
-        setPosition(initialPosition);
-        setDirection(null);
-        // setNextDirection(null);
-    }, [lives]);
+        dispatch({ type: 'RESET', payload: initialPosition });
+    }, [lives, initialPosition]);
 
-    // const isValidMove = useCallback((y, x) => {
-    //     return y >= 0 && 
-    //            y < maze.length && 
-    //            x >= 0 && 
-    //            x < maze[0].length && 
-    //            maze[y][x] !== 1;
-    // }, [maze]);
-    const isValidMove = (y, x) => {
+    const isValidMove = useCallback((y, x) => {
         return maze[y][x] !== 1;
-    };
+    }, [maze]);
 
     const handleKeyDown = useCallback((e) => {
         console.log('Key pressed:', e.key); // Debugging log
-        let newDirection = direction;
 
         switch (e.key) {
             case 'ArrowUp':
-                setDirection('up');
+                dispatch({ type: 'SET_DIRECTION', payload: 'up' });
                 break;
             case 'ArrowDown':
-                setDirection('down');
+                dispatch({ type: 'SET_DIRECTION', payload: 'down' });
                 break;
             case 'ArrowLeft':
-                setDirection('left');
+                dispatch({ type: 'SET_DIRECTION', payload: 'left' });
                 break;
             case 'ArrowRight':
-                setDirection('right');
+                dispatch({ type: 'SET_DIRECTION', payload: 'right' });
                 break;
             default:
                 break;
         }
-
-        // setNextDirection(newDirection);
-        console.log('Next direction:', newDirection); // Debugging log
-    }, [direction]);
+    }, []);
 
     const movePacMan = useCallback(() => {
         if (!gameStarted) return;
@@ -97,7 +102,7 @@ const PacMan = ({
         }
 
         if (isValidMove(newY, newX)) {
-            setPosition({ x: newX, y: newY });
+            dispatch({ type: 'SET_POSITION', payload: { x: newX, y: newY } });
             onMove({ x: newX, y: newY }, direction);
 
             // Handle pellet consumption
@@ -125,7 +130,7 @@ const PacMan = ({
                 setMaze(newMaze, 50); // Power pellet points
             }
         }
-    }, [direction, maze, onMove, position, isValidMove, setMaze,gameStarted]);
+    }, [direction, maze, onMove, position, isValidMove, setMaze, gameStarted]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -134,7 +139,7 @@ const PacMan = ({
             window.removeEventListener('keydown', handleKeyDown);
             clearInterval(interval);
         };
-    }, [direction, position]);
+    }, [handleKeyDown, movePacMan]);
 
     const getRotation = () => {
         switch (direction) {

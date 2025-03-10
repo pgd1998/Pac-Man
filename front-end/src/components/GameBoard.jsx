@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { mazeLayout } from '../utils/maze';
+import { mazeLayout } from '../utils/maze.js';
 import './GameBoard.css';
-import PacMan from './PacMan';
-import Ghost from './Ghost';
+import PacMan from './PacMan.jsx';
+import Ghost from './Ghost.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export const GameBoard = ({ lives, setLives, score, setScore }) => {
+    
+    
     const [maze, setMaze] = useState(mazeLayout);
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
@@ -16,6 +18,8 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [isResetting, setIsResetting] = useState(false);
     const [countdown, setCountdown] = useState(3); // State for countdown
     const [gameStarted, setGameStarted] = useState(false);
+
+
 
     const ghostInitialPositions = [
         { x: 5, y: 5, type: 'blinky', color: 'red' },
