@@ -34,7 +34,7 @@ app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
-  origin: "https://your-frontend-domain.vercel.app", // Replace with your frontend domain
+  origin: "https://pac-man-pgd.vercel.app", // Replace with your frontend domain
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
