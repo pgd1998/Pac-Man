@@ -1,4 +1,4 @@
-import updateApi from "../utils/updateApi";
+import updateApi from "../utils/updateApi.js";
 
 const useUpdate = () => {
     const updateHighScore = async (updateData) => {

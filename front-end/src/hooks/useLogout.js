@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import ClearScore from "../components/ClearScore";
+import ClearScore from "../components/ClearScore.js";
 
 const useLogout = () => {
     const navigate = useNavigate();

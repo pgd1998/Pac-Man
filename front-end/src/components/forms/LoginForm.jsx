@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Login.css'
 import { useNavigate } from 'react-router';
-import useLogin from '../../hooks/useLogin';
-import UserGamePage from '../../pages/UserGamePage';
+import useLogin from '../../hooks/useLogin.js';
+// import UserGamePage from '../../pages/UserGamePage';
 
 const LoginForm = () => {
     const [name, setName] = useState('');

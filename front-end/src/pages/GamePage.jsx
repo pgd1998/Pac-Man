@@ -1,10 +1,10 @@
 import React,{ useState } from "react";
-import GameBoardHeader from "../components/headers/GameBoardHeader";
-import {GameBoard} from "../components/GameBoard";
+import GameBoardHeader from "../components/headers/GameBoardHeader.jsx";
+import {GameBoard} from "../components/GameBoard.jsx";
 import './GamePage.css';
-import UtilsHeader from "../components/headers/UtilsHeader";
+import UtilsHeader from "../components/headers/UtilsHeader.jsx";
 // import '../components/GameBoard.css'
-import WelcomeMsgModal from "../components/modals/WelcomeMsg";
+// import WelcomeMsgModal from "../components/modals/WelcomeMsg";
 
 const GamePage = () => {
     const [lives, setLives] = useState(3);

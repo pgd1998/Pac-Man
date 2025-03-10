@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './Ghost.css';
 
 const Ghost = ({
@@ -51,27 +51,12 @@ const Ghost = ({
     }, [maze, gameBoardRef]);
 
     // Check if a move is valid (i.e., not into a wall)
-    const isValidMove = (y, x) => {
+    const isValidMove = useCallback((y, x) => {
         return y >= 0 && y < maze.length && x >= 0 && x < maze[0].length && maze[y][x] !== 1;
-    };
-
-    // Get a random direction, optionally excluding a specific direction
-    const getRandomDirection = (currentPos, excludeDirection) => {
-        const possibleDirs = getPossibleDirections(currentPos);
-        if (excludeDirection) {
-            const filteredDirs = possibleDirs.filter(dir => dir !== excludeDirection);
-            return filteredDirs[Math.floor(Math.random() * filteredDirs.length)] || possibleDirs[0];
-        }
-        return possibleDirs[Math.floor(Math.random() * possibleDirs.length)];
-    };
-
-    // Calculate the Euclidean distance between two positions
-    const calculateDistance = (pos1, pos2) => {
-        return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
-    };
+    }, [maze]);
 
     // Get all possible directions the ghost can move from a given position
-    const getPossibleDirections = (pos) => {
+    const getPossibleDirections = useCallback((pos) => {
         const directions = [];
         const moves = {
             up: { x: 0, y: -1 },
@@ -89,6 +74,21 @@ const Ghost = ({
         });
 
         return directions;
+    }, [isValidMove]);
+
+    // Get a random direction, optionally excluding a specific direction
+    const getRandomDirection = useCallback((currentPos, excludeDirection) => {
+        const possibleDirs = getPossibleDirections(currentPos);
+        if (excludeDirection) {
+            const filteredDirs = possibleDirs.filter(dir => dir !== excludeDirection);
+            return filteredDirs[Math.floor(Math.random() * filteredDirs.length)] || possibleDirs[0];
+        }
+        return possibleDirs[Math.floor(Math.random() * possibleDirs.length)];
+    }, [getPossibleDirections]);
+
+    // Calculate the Euclidean distance between two positions
+    const calculateDistance = (pos1, pos2) => {
+        return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
     };
 
     // Get the opposite direction of a given direction
@@ -103,7 +103,7 @@ const Ghost = ({
     };
 
     // Get the best direction to move towards a target position
-    const getBestDirection = (currentPos, targetPos) => {
+    const getBestDirection = useCallback((currentPos, targetPos) => {
         const possibleDirs = getPossibleDirections(currentPos);
         const moves = {
             up: { x: 0, y: -1 },
@@ -137,10 +137,10 @@ const Ghost = ({
         });
 
         return bestDir;
-    };
+    }, [direction, getPossibleDirections]);
 
     // Calculate the next move for the ghost based on the game mode and PacMan's position
-    const calculateGhostMove = () => {
+    const calculateGhostMove = useCallback(() => {
         if (gameMode === 'frightened') {
             // In frightened mode, maintain direction until hitting a wall
             const possibleDirs = getPossibleDirections(position);
@@ -217,10 +217,10 @@ const Ghost = ({
         }
 
         return getBestDirection(position, targetPos);
-    };
+    }, [gameMode, getPossibleDirections, getRandomDirection, pacmanDirection, position, type, blinkyPosition, cornerPositions.clyde, direction, getBestDirection]);
 
     // Move the ghost based on the calculated direction
-    const moveGhost = () => {
+    const moveGhost = useCallback(() => {
         if (!gameStarted) return; // Prevent movement if the game hasn't started
 
         const newDirection = calculateGhostMove();
@@ -254,13 +254,13 @@ const Ghost = ({
             const newRandomDirection = getRandomDirection(position, getOppositeDirection(direction));
             setDirection(newRandomDirection);
         }
-    };
+    }, [gameStarted, calculateGhostMove, position, direction, maze, onMove, getRandomDirection, isValidMove]);
 
     // Set an interval to move the ghost periodically
     useEffect(() => {
         const interval = setInterval(moveGhost, gameMode === 'frightened' ? 400 : 350);
         return () => clearInterval(interval);
-    }, [direction, position, gameMode,gameStarted]);
+    }, [moveGhost, gameMode, gameStarted]);
 
     return (
         <div
