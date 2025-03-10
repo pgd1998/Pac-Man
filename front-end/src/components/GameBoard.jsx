@@ -6,6 +6,8 @@ import Ghost from './Ghost';
 import { useNavigate } from 'react-router-dom';
 
 export const GameBoard = ({ lives, setLives, score, setScore }) => {
+    
+    
     const [maze, setMaze] = useState(mazeLayout);
     const pacManInitialPosition = { x: 1, y: 1 };
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
@@ -18,7 +20,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
     const [gameStarted, setGameStarted] = useState(false);
 
 
-    
+
     const ghostInitialPositions = [
         { x: 5, y: 5, type: 'blinky', color: 'red' },
         { x: 6, y: 6, type: 'pinky', color: 'pink' },
