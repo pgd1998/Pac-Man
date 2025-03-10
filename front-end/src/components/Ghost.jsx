@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef,useCallback } from 'react';
 import './Ghost.css';
 
 const Ghost = ({
@@ -220,7 +220,7 @@ const Ghost = ({
     };
 
     // Move the ghost based on the calculated direction
-    const moveGhost = () => {
+    const moveGhost = useCallback(() => {
         if (!gameStarted) return; // Prevent movement if the game hasn't started
 
         const newDirection = calculateGhostMove();
@@ -254,13 +254,14 @@ const Ghost = ({
             const newRandomDirection = getRandomDirection(position, getOppositeDirection(direction));
             setDirection(newRandomDirection);
         }
-    };
+    }, [gameStarted, calculateGhostMove, position, direction, maze, onMove]);
+
 
     // Set an interval to move the ghost periodically
     useEffect(() => {
         const interval = setInterval(moveGhost, gameMode === 'frightened' ? 400 : 350);
         return () => clearInterval(interval);
-    }, [direction, position, gameMode,gameStarted]);
+    }, [moveGhost, gameMode,gameStarted]);
 
     return (
         <div
