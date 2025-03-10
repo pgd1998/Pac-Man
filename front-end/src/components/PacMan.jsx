@@ -79,36 +79,6 @@ const PacMan = ({
         let newX = position.x;
         let newY = position.y;
 
-        // Check if the next direction is valid before changing
-        // if (nextDirection) {
-        //     let nextX = newX;
-        //     let nextY = newY;
-
-        //     switch (nextDirection) {
-        //         case 'up':
-        //             nextY = position.y - 1;
-        //             break;
-        //         case 'down':
-        //             nextY = position.y + 1;
-        //             break;
-        //         case 'left':
-        //             nextX = position.x - 1;
-        //             break;
-        //         case 'right':
-        //             nextX = position.x + 1;
-        //             break;
-        //         default:
-        //             break;
-        //     }
-
-        //     if (isValidMove(nextY, nextX)) {
-        //         setDirection(nextDirection);
-        //         setNextDirection(null);
-        //         newX = nextX;
-        //         newY = nextY;
-        //     }
-        // }
-
         switch (direction) {
             case 'up':
                 newY = Math.max(0, position.y - 1);
@@ -159,7 +129,7 @@ const PacMan = ({
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
-        const interval = setInterval(movePacMan, 200); // Slightly faster movement
+        const interval = setInterval(movePacMan, 300); // Slightly faster movement
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             clearInterval(interval);

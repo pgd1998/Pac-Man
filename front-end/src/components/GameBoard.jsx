@@ -87,17 +87,26 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
 
     const checkCollisions = (pacmanPos, ghostPosArray) => {
         if (isResetting) return;
-        {/*Collision Threshold: A threshold value (0.5) is defined to determine 
-            when a collision is considered to have occurred.
-        Distance Calculation: For each ghost, the Euclidean distance between 
-        PacMan's position (pacmanPos) and the ghost's position (ghostPos) is calculated. */}
-        const collisionThreshold = 0.5;
-        ghostPosArray.forEach((ghostPos) => {
-            const distance = Math.sqrt(
-                Math.pow(pacmanPos.x - ghostPos.x, 2) + Math.pow(pacmanPos.y - ghostPos.y, 2)
-            );
 
-            if (distance < collisionThreshold) {
+        const pacmanBounds = {
+            left: pacmanPos.x,
+            right: pacmanPos.x + 1,
+            top: pacmanPos.y,
+            bottom: pacmanPos.y + 1
+        };
+
+        ghostPosArray.forEach((ghostPos) => {
+            const ghostBounds = {
+                left: ghostPos.x,
+                right: ghostPos.x + 1,
+                top: ghostPos.y,
+                bottom: ghostPos.y + 1
+            };
+
+            const horizontalOverlap = pacmanBounds.left < ghostBounds.right && pacmanBounds.right > ghostBounds.left;
+            const verticalOverlap = pacmanBounds.top < ghostBounds.bottom && pacmanBounds.bottom > ghostBounds.top;
+
+            if (horizontalOverlap && verticalOverlap) {
                 if (gameMode === 'frightened') {
                     // Ghost is eaten
                     const index = ghostPositions.findIndex(g => g.x === ghostPos.x && g.y === ghostPos.y);

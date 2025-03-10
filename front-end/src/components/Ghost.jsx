@@ -258,7 +258,7 @@ const Ghost = ({
 
     // Set an interval to move the ghost periodically
     useEffect(() => {
-        const interval = setInterval(moveGhost, gameMode === 'frightened' ? 400 : 300);
+        const interval = setInterval(moveGhost, gameMode === 'frightened' ? 400 : 350);
         return () => clearInterval(interval);
     }, [direction, position, gameMode,gameStarted]);
 
