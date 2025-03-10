@@ -20,39 +20,31 @@
 
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 
-connectDB();
-
+// Initialize Express
 const app = express();
+
+// Connect to database (ensure this is properly configured for serverless)
+connectDB();
 
 // Middleware setup
 app.use(express.json());
 
-// CORS configuration
-const corsOptions = {
-  origin: "https://pac-man-pgd.vercel.app", // Replace with your frontend domain
+// CORS configuration - more permissive for development
+app.use(cors({
+  origin: '*', // Consider tightening this in production
   optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+}));
 
 // API routes
 app.use("/api/users", userRoutes);
 
-// Serve static files from the React app
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "../client/build")));
-
-// Catch-all handler to serve the React app for any route not handled by the API
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+// Health check route
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
 });
 
-const port = process.env.PORT || 5002;
-app.listen(port, () => {
-  console.log(`Server is running at ${port}`);
-});
+// Important: This is how Vercel expects the export
+export default app;
