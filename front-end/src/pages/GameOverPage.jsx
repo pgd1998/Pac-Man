@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import './GameOverPage.css';
-import ClearScore from "../components/ClearScore";
-import useUpdate from "../hooks/useUpdate";
+import ClearScore from "../components/ClearScore.js";
+import useUpdate from "../hooks/useUpdate.js";
 
 const GameOver = () => {
     const navigate = useNavigate();

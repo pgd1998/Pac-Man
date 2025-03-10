@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import signupApi from "../utils/signupApi";
+import signupApi from "../utils/signupApi.js";
 
 const useSignUp = () => {
     const [loading, setLoading] = useState(false);

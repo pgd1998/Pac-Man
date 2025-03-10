@@ -1,4 +1,4 @@
-import ClearScore from "../ClearScore"
+import ClearScore from "../ClearScore.js"
 import { useNavigate } from "react-router";
 import './Modal.css';
 const HomeModal = ({onClose}) => {

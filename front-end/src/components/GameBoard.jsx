@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { mazeLayout } from '../utils/maze';
+import { mazeLayout } from '../utils/maze.js';
 import './GameBoard.css';
-import PacMan from './PacMan';
-import Ghost from './Ghost';
+import PacMan from './PacMan.jsx';
+import Ghost from './Ghost.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export const GameBoard = ({ lives, setLives, score, setScore }) => {

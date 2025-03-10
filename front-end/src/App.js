@@ -1,11 +1,11 @@
 import './App.css';
-import Home from './pages/Home';
+import Home from './pages/Home.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import GamePage from './pages/GamePage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import GameOver from './pages/GameOverPage';
-import UserGamePage from './pages/UserGamePage';
+import GamePage from './pages/GamePage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import SignupPage from './pages/SignupPage.jsx';
+import GameOver from './pages/GameOverPage.jsx';
+import UserGamePage from './pages/UserGamePage.jsx';
 
 function App() {
   return (

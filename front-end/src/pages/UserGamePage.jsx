@@ -1,6 +1,6 @@
 import React from "react";
-import {GameBoard} from "../components/GameBoard";
-import GameBoardHeader from "../components/headers/GameBoardHeader";
+import {GameBoard} from "../components/GameBoard.jsx";
+import GameBoardHeader from "../components/headers/GameBoardHeader.jsx";
 
 const UserGamePage = () => {
     return (

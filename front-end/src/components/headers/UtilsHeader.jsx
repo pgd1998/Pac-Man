@@ -1,5 +1,5 @@
 import React from "react";
-import WelcomeMsgModal from "../modals/WelcomeMsg";
+import WelcomeMsgModal from "../modals/WelcomeMsg.jsx";
 // import './UtilsHeader.css';
 
 

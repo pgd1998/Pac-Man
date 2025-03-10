@@ -1,5 +1,5 @@
 import './Modal.css';
-import useLogout from '../../hooks/useLogout';
+import useLogout from '../../hooks/useLogout.js';
 const LogoutModal = ({onClose}) => {
     const logout = useLogout();
 
