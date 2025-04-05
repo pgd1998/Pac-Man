@@ -1,3 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --primary-color: #4A148C;       /* Deep purple */
+  --secondary-color: #FFC107;     /* Amber */
+  --tertiary-color: #00BCD4;      /* Cyan */
+  --ghost-red: #F44336;           /* Blinky */
+  --ghost-pink: #E91E63;          /* Pinky */
+  --ghost-cyan: #00BCD4;          /* Inky */
+  --ghost-orange: #FF9800;        /* Clyde */
+  --background-dark: #1A1A2E;     /* Dark blue background */
+  --background-light: #222438;    /* Slightly lighter blue */
+  --text-primary: #FFFFFF;        /* White text */
+  --text-secondary: #B0B0B0;      /* Light gray text */
+  --pellet-color: #FFC107;        /* Amber pellets */
+  --power-pellet-glow: #FF9800;   /* Orange glow */
+  --wall-color: #3F51B5;          /* Indigo walls */
+  --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.2);
+  --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.3);
+  --shadow-strong: 0 8px 20px rgba(0, 0, 0, 0.4);
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 16px;
+  --font-game: 'Press Start 2P', cursive;
+  --font-ui: 'Roboto', sans-serif;
+  --transition-speed: 0.3s;
+}
+
 body {
   overflow: hidden;
   margin: 0;

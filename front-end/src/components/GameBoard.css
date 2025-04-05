@@ -1,23 +1,815 @@
-/* .game-page-container {
+/* Modern UI Theme Variables */
+:root {
+    --primary-color: #4A148C;       /* Deep purple */
+    --secondary-color: #FFC107;     /* Amber */
+    --tertiary-color: #00BCD4;      /* Cyan */
+    --ghost-red: #F44336;           /* Blinky */
+    --ghost-pink: #E91E63;          /* Pinky */
+    --ghost-cyan: #00BCD4;          /* Inky */
+    --ghost-orange: #FF9800;        /* Clyde */
+    --background-dark: #1A1A2E;     /* Dark blue background */
+    --background-light: #222438;    /* Slightly lighter blue */
+    --text-primary: #FFFFFF;        /* White text */
+    --text-secondary: #B0B0B0;      /* Light gray text */
+    --pellet-color: #FFC107;        /* Amber pellets */
+    --power-pellet-glow: #FF9800;   /* Orange glow */
+    --wall-color: #3F51B5;          /* Indigo walls */
+    --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.2);
+    --shadow-medium: 0 4px 10px rgba(0, 0, 0, 0.3);
+    --shadow-strong: 0 8px 20px rgba(0, 0, 0, 0.4);
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 16px;
+    --font-game: 'Press Start 2P', cursive;
+    --font-ui: 'Roboto', sans-serif;
+    --transition-speed: 0.3s;
+  }
+  
+  /* Global Styles */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-ui);
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+  
+  /* Game Container */
+  .game-page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 20px;
     box-sizing: border-box;
-    position: relative;
-    padding-top: 60px;
-    
-} */
-
-/* Container for the top header */
-/* .header-container {
+    background: linear-gradient(135deg, var(--background-dark) 0%, var(--background-light) 100%);
+  }
+  
+  /* Header Styles */
+  .game-header,
+  .utils-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    z-index: 10;
-} */
+    max-width: 1000px;
+    margin-bottom: 15px;
+    padding: 15px 20px;
+    background-color: rgba(30, 30, 50, 0.8);
+    backdrop-filter: blur(5px);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .utils-header .lives,
+  .utils-header .score,
+  .utils-header .userName,
+  .utils-header .highScore {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: var(--border-radius-small);
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-speed) ease;
+  }
+  
+  .utils-header .score {
+    color: var(--secondary-color);
+  }
+  
+  .utils-header .lives {
+    display: flex;
+    align-items: center;
+  }
+  
+  .utils-header .lives::before {
+    content: "❤️";
+    margin-right: 8px;
+  }
+  
+  /* Game Board Styles */
+  .game-board-container {
+    width: 100%;
+    max-width: 800px;
+    height: calc(100vh - 180px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  
+  .game-board {
+    width: 100%;
+    max-width: 750px;
+    max-height: 670px;
+    aspect-ratio: 1 / 0.9;
+    border-radius: var(--border-radius-large);
+    background-color: var(--background-dark);
+    box-shadow: var(--shadow-strong), 0 0 40px rgba(74, 20, 140, 0.3);
+    padding: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Cell Styles */
+  .cell {
+    position: relative;
+    transition: background-color 0.3s ease;
+  }
+  
+  .wall {
+    background-color: var(--wall-color);
+    box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+  
+  .path {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .pellet {
+    width: 20%;
+    height: 20%;
+    background-color: var(--pellet-color);
+    border-radius: 50%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .power-pellet {
+    width: 40%;
+    height: 40%;
+    background-color: var(--pellet-color);
+    border-radius: 50%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px var(--power-pellet-glow);
+    animation: pulsate 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulsate {
+    from {
+      transform: translate(-50%, -50%) scale(0.8);
+      box-shadow: 0 0 10px var(--power-pellet-glow);
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 0 0 25px var(--power-pellet-glow);
+    }
+  }
+  
+  /* Button Styles */
+  .game-board-header button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    background-color: var(--background-light);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-light);
+    letter-spacing: 0.5px;
+  }
+  
+  .game-board-header .home-button {
+    background-color: var(--tertiary-color);
+    color: #FFFFFF;
+  }
+  
+  .game-board-header .home-button:hover {
+    background-color: #00ACC1;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .game-board-header .quit-button {
+    background-color: var(--ghost-red);
+    color: #FFFFFF;
+  }
+  
+  .game-board-header .quit-button:hover {
+    background-color: #D32F2F;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .game-board-header .guide-button {
+    background-color: var(--ghost-orange);
+    color: #FFFFFF;
+  }
+  
+  .game-board-header .guide-button:hover {
+    background-color: #FB8C00;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .game-board-header .logout-button {
+    background-color: var(--background-light);
+    color: #FFFFFF;
+  }
+  
+  .game-board-header .logout-button:hover {
+    background-color: #2C3E50;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Pacman & Ghost Styling */
+  .pacman {
+    background: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
+    transition: top 0.2s linear, left 0.2s linear, transform 0.2s linear;
+  }
+  
+  .ghost-blinky .ghost-body {
+    background: var(--ghost-red);
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.6);
+  }
+  
+  .ghost-pinky .ghost-body {
+    background: var(--ghost-pink);
+    box-shadow: 0 0 10px rgba(233, 30, 99, 0.6);
+  }
+  
+  .ghost-inky .ghost-body {
+    background: var(--ghost-cyan);
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
+  }
+  
+  .ghost-clyde .ghost-body {
+    background: var(--ghost-orange);
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.6);
+  }
+  
+  /* Modal Styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    background: linear-gradient(145deg, var(--background-light), var(--background-dark));
+    padding: 25px;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-strong);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modal p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  
+  .modal button {
+    padding: 12px 24px;
+    margin: 10px;
+    border: none;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all var(--transition-speed) ease;
+    box-shadow: var(--shadow-light);
+  }
+  
+  .modal button:first-of-type {
+    background-color: var(--ghost-red);
+    color: white;
+  }
+  
+  .modal button:first-of-type:hover {
+    background-color: #C62828;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .modal button:last-of-type {
+    background-color: var(--tertiary-color);
+    color: white;
+  }
+  
+  .modal button:last-of-type:hover {
+    background-color: #0097A7;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Countdown Overlay */
+  .countdown-overlay {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
+    border-radius: var(--border-radius-large);
+    animation: pulseOverlay 1s infinite alternate;
+  }
+  
+  .countdown {
+    font-family: var(--font-game);
+    font-size: 5rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 15px rgba(255, 193, 7, 0.8);
+    animation: countdownPulse 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes countdownPulse {
+    from {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    to {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes pulseOverlay {
+    from {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
+    }
+    to {
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.95));
+    }
+  }
+  
+  /* Life Lost Overlay */
+  .life-lost-overlay {
+    background-color: rgba(244, 67, 54, 0.8);
+    color: white;
+    padding: 20px 30px;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-strong);
+    animation: fadeInOut 2s ease;
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+  }
+  
+  /* Game Over Page */
+  .game-over-container {
+    background: linear-gradient(135deg, var(--background-dark) 0%, #2C3E50 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .game-over-content {
+    background-color: rgba(30, 30, 50, 0.9);
+    padding: 40px;
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-strong);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .game-over-content h1 {
+    color: var(--ghost-red);
+    font-family: var(--font-game);
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(244, 67, 54, 0.6);
+  }
+  
+  .game-over-content .score {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .game-over-content .score::before {
+    content: "🏆";
+    margin-right: 10px;
+    font-size: 2rem;
+  }
+  
+  .game-over-content .buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+  }
+  
+  .game-over-content button {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius-medium);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    min-width: 150px;
+  }
+  
+  .game-over-content .home-button {
+    background-color: var(--tertiary-color);
+    color: white;
+  }
+  
+  .game-over-content .home-button:hover {
+    background-color: #00ACC1;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .game-over-content .play-button {
+    background-color: var(--secondary-color);
+    color: #333;
+    font-weight: 700;
+  }
+  
+  .game-over-content .play-button:hover {
+    background-color: #FFB300;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Home Page Styling */
+  .home-container {
+    background-color: var(--background-dark);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/Pacman-home.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 20px;
+  }
+  
+  .home-container h1 {
+    font-family: var(--font-game);
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    text-shadow: 0 0 15px rgba(255, 193, 7, 0.7);
+    margin-bottom: 30px;
+  }
+  
+  .header-home {
+    margin: 20px 0 40px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .header-home button {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius-medium);
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    transition: all var(--transition-speed) ease;
+    backdrop-filter: blur(5px);
+    min-width: 150px;
+  }
+  
+  .header-home .play-game {
+    background-color: var(--secondary-color);
+    color: #222;
+  }
+  
+  .header-home .play-game:hover {
+    background-color: #FFB300;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .header-home .login {
+    background-color: var(--tertiary-color);
+    color: white;
+  }
+  
+  .header-home .login:hover {
+    background-color: #00ACC1;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .header-home .signup {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .header-home .signup:hover {
+    background-color: #6A1B9A;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .home-container h6 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 15px;
+  }
+  
+  .home-container p {
+    max-width: 700px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: var(--border-radius-medium);
+  }
+  
+  /* Form Styling */
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--background-dark) 0%, #2C3E50 100%);
+    padding: 20px;
+  }
+  
+  .form {
+    background-color: rgba(30, 30, 50, 0.9);
+    padding: 30px;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-strong);
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeInUp 0.4s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .form input[type='text'],
+  .form input[type='password'] {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.07);
+    border-radius: var(--border-radius-small);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-speed) ease;
+    box-sizing: border-box;
+  }
+  
+  .form input[type='text']:focus,
+  .form input[type='password']:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 2px var(--tertiary-color);
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 25px;
+  }
+  
+  .form button {
+    padding: 12px 0;
+    width: 48%;
+    background-color: var(--tertiary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all var(--transition-speed) ease;
+  }
+  
+  .form button.cancel {
+    background-color: var(--ghost-red);
+  }
+  
+  .form button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .form button:disabled {
+    background-color: #9E9E9E;
+    cursor: not-allowed;
+  }
+  
+  .form p {
+    color: var(--ghost-red);
+    font-size: 0.9rem;
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  /* Welcome Message Modal */
+  .welcome-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10vh;
+  }
+  
+  .message-container {
+    background: linear-gradient(145deg, var(--background-light), var(--background-dark));
+    padding: 25px 30px;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-strong);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.4s ease-out;
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .message-container span {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .message-container strong {
+    color: var(--secondary-color);
+    font-size: 1.4rem;
+  }
+  
+  .message-container button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color var(--transition-speed) ease;
+  }
+  
+  .message-container button:hover {
+    color: var(--text-primary);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .game-header,
+    .utils-header {
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px;
+    }
+    
+    .utils-header .lives,
+    .utils-header .score,
+    .utils-header .userName,
+    .utils-header .highScore {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .game-board {
+      max-width: 100%;
+    }
+    
+    .game-board-header {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .header-home {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .header-home button {
+      width: 100%;
+      max-width: 250px;
+    }
+    
+    .home-container h1 {
+      font-size: 2rem;
+      text-align: center;
+    }
+    
+    .form {
+      padding: 20px;
+    }
+    
+    .game-over-content .buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .game-over-content button {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .utils-header {
+      font-size: 0.9rem;
+    }
+  
+    .countdown {
+      font-size: 3.5rem;
+    }
+    
+    .modal {
+      padding: 15px;
+    }
+    
+    .game-over-content h1 {
+      font-size: 2rem;
+    }
+  }
 
-/* Container for the game board and UtilsHeader */
+
+  /* Additional */
+  /* Enhanced Maze Styling */
+
+/* Game Board Container */
 .game-board-container {
     display: flex;
     flex-direction: column;
@@ -28,74 +820,178 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-}
-
-.game-board {
+  }
+  
+  .game-board {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     max-width: 700px;
     max-height: 620px;
     box-sizing: border-box;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 40px rgba(74, 20, 140, 0.3);
     background-color: #000;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 10px;
-}
-
-.row {
+    overflow: hidden;
+    border: 3px solid rgba(63, 81, 181, 0.5);
+  }
+  
+  /* Maze Layout */
+  .row {
     display: flex;
     width: 100%;
     height: auto;
-}
-
-.cell {
+  }
+  
+  .cell {
     flex: 1;
     position: relative;
     aspect-ratio: 1 / 1;
     padding: 0;
     box-sizing: border-box;
-}
-
-.wall {
-    background-color: #2e2d2d;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Wall Types for Visual Interest */
+  .wall {
+    position: relative;
+    background-color: #3F51B5; /* Indigo walls */
     border-radius: 2px;
-}
-
-.path {
+    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Direction-specific wall styling for added depth */
+  .wall.horizontal {
+    background: linear-gradient(to bottom, #5C6BC0, #3F51B5);
+  }
+  
+  .wall.vertical {
+    background: linear-gradient(to right, #5C6BC0, #3F51B5);
+  }
+  
+  .wall.corner {
+    background: radial-gradient(circle at center, #5C6BC0, #3F51B5);
+    border-radius: 3px;
+  }
+  
+  /* Add depth effect to walls */
+  .wall::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+    border-radius: 2px;
+  }
+  
+  .path {
     background-color: #000;
-}
-
-.pellet {
+    position: relative;
+  }
+  
+  /* Add subtle grid pattern to the paths */
+  .path::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 10px 10px;
+  }
+  
+  /* Pellets */
+  .pellet {
     width: 20%;
     height: 20%;
-    background-color: #ffb8ae;
+    background-color: #FFC107; /* Amber pellets */
     border-radius: 50%;
     margin: auto;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.power-pellet {
+    box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+  }
+  
+  .power-pellet {
     width: 40%;
     height: 40%;
-    background-color: #ffb8ae;
+    background-color: #FFC107; /* Amber power pellets */
     border-radius: 50%;
     margin: auto;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation: pulsate 0.8s ease-in-out infinite alternate;
-    box-shadow: 0 0 15px rgba(255, 184, 174, 0.7);
-}
-.countdown-overlay {
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.7);
+    animation: pulsate 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulsate {
+    from {
+      transform: translate(-50%, -50%) scale(0.8);
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+    }
+  }
+  
+  /* Ghost house */
+  .ghost-house {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px dashed rgba(244, 67, 54, 0.7);
+    box-shadow: inset 0 0 10px rgba(244, 67, 54, 0.3);
+    position: relative;
+  }
+  
+  .ghost-house::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(244, 67, 54, 0.1),
+      rgba(244, 67, 54, 0.1) 5px,
+      rgba(0, 0, 0, 0) 5px,
+      rgba(0, 0, 0, 0) 10px
+    );
+  }
+  
+  /* Frightened ghost state */
+  .ghost.frightened .ghost-body {
+    background-color: #2121ff !important;
+    animation: frightenedPulse 0.4s linear infinite alternate;
+  }
+  
+  @keyframes frightenedPulse {
+    from {
+      background-color: #2121ff;
+      box-shadow: 0 0 15px rgba(33, 33, 255, 0.7);
+    }
+    to {
+      background-color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    }
+  }
+  
+  /* Game Overlays */
+  .countdown-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -106,106 +1002,521 @@
     justify-content: center;
     align-items: center;
     z-index: 10;
-}
-
-.countdown {
+    border-radius: 12px;
+  }
+  
+  .countdown {
+    font-family: 'Press Start 2P', cursive;
     font-size: 5rem;
-    color: white;
-}
-@keyframes pulsate {
+    color: #FFC107;
+    text-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+    animation: countdownPulse 0.5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes countdownPulse {
     from {
-        transform: translate(-50%, -50%) scale(0.8);
-        box-shadow: 0 0 10px rgba(255, 184, 174, 0.5);
+      transform: scale(1);
+      opacity: 0.8;
     }
     to {
-        transform: translate(-50%, -50%) scale(1.1);
-        box-shadow: 0 0 20px rgba(255, 184, 174, 0.8);
+      transform: scale(1.1);
+      opacity: 1;
     }
-}
-
-.ghost-house {
-    background-color: #000;
-    border: 2px dashed #ff0000;
-    box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.5);
-}
-
-/* Ghost states */
-.ghost.frightened .ghost-body {
-    background-color: #2121ff !important;
-    animation: frightenedPulse 0.4s linear infinite alternate;
-}
-
-@keyframes frightenedPulse {
-    from {
-        background-color: #2121ff;
-    }
-    to {
-        background-color: #ffffff;
-    }
-}
-
-/* Responsive design */
-@media (max-width: 600px) {
-    .game-board {
-        width: 95vw;
-        height: 95vh;
-        max-width: none;
-        max-height: none;
-        padding: 5px;
-    }
-
-    .pellet {
-        width: 25%;
-        height: 25%;
-    }
-
-    .power-pellet {
-        width: 45%;
-        height: 45%;
-    }
-}
-
-/* Score display enhancements */
-.score-container {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Arial', sans-serif;
-    font-size: 24px;
-    color: #ffb8ae;
-    text-shadow: 0 0 10px rgba(255, 184, 174, 0.5);
-}
-
-/* Game over overlay */
-.game-over {
+  }
+  
+  /* Life lost overlay */
+  .life-lost-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(244, 67, 54, 0.3);
+    backdrop-filter: blur(3px);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #ffb8ae;
-    font-size: 48px;
-    font-family: 'Arial', sans-serif;
-    text-shadow: 0 0 20px rgba(255, 184, 174, 0.8);
-    z-index: 1000;
-}
+    z-index: 100;
+    animation: fadeInOut 1.5s ease forwards;
+    border-radius: 12px;
+  }
+  
+  .life-lost-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(244, 67, 54, 0.5);
+    border: 2px solid rgba(244, 67, 54, 0.5);
+    transform: scale(0);
+    animation: popIn 0.3s 0.2s ease forwards;
+  }
+  
+  @keyframes popIn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  
+  .life-lost-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .life-lost-content p {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+  
+  .remaining-lives {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  /* Floating score animation */
+  .floating-score {
+    position: absolute;
+    color: #FFC107;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+    pointer-events: none;
+    animation: floatUp 1s forwards ease-out;
+    z-index: 50;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Press Start 2P', cursive;
+  }
+  
+  @keyframes floatUp {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -100px);
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .game-board {
+      border-width: 2px;
+    }
+    
+    .countdown {
+      font-size: 4rem;
+    }
+    
+    .life-lost-content {
+      padding: 20px;
+    }
+    
+    .life-lost-icon {
+      font-size: 30px;
+    }
+    
+    .life-lost-content p {
+      font-size: 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .game-board {
+      padding: 5px;
+    }
+    
+    .countdown {
+      font-size: 3rem;
+    }
+    
+    .life-lost-content {
+      padding: 15px;
+      max-width: 80%;
+    }
+    
+    .floating-score {
+      font-size: 20px;
+    }
+  }
 
-/* Add this CSS for the life lost overlay */
-.life-lost-overlay {
+
+  /* new again */
+  /* Enhanced GameBoard.css with better maze visibility */
+
+.game-board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100vh - 220px);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .game-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 700px;
+    max-height: 620px;
+    box-sizing: border-box;
+    box-shadow: 0 0 40px rgba(74, 20, 140, 0.3);
+    background-color: #000;
+    border-radius: 12px;
+    padding: 10px;
+    overflow: hidden;
+    border: 3px solid rgba(63, 81, 181, 0.5);
+  }
+  
+  /* Maze Layout */
+  .row {
+    display: flex;
+    width: 100%;
+    height: auto;
+  }
+  
+  .cell {
+    flex: 1;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Wall Styles with better visibility */
+  .wall {
+    position: relative;
+    background-color: #3F51B5; /* Indigo walls */
+    border-radius: 2px;
+    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Direction-specific wall styling for added depth */
+  .wall.horizontal {
+    background: linear-gradient(to bottom, #5C6BC0, #3F51B5);
+  }
+  
+  .wall.vertical {
+    background: linear-gradient(to right, #5C6BC0, #3F51B5);
+  }
+  
+  .wall.corner {
+    background: radial-gradient(circle at center, #5C6BC0, #3F51B5);
+    border-radius: 3px;
+  }
+  
+  .wall.junction {
+    background-color: #3949AB;
+  }
+  
+  .wall.end-piece {
+    background-color: #5C6BC0;
+  }
+  
+  /* Add depth effect to walls */
+  .wall::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+    border-radius: 2px;
+  }
+  
+  .path {
+    background-color: #000;
+    position: relative;
+  }
+  
+  /* Add subtle grid pattern to the paths */
+  .path::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 10px 10px;
+  }
+  
+  /* Pellets */
+  .pellet {
+    width: 20%;
+    height: 20%;
+    background-color: #FFC107; /* Amber pellets */
+    border-radius: 50%;
+    margin: auto;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+  }
+  
+  .power-pellet {
+    width: 40%;
+    height: 40%;
+    background-color: #FFC107; /* Amber power pellets */
+    border-radius: 50%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.7);
+    animation: pulsate 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulsate {
+    from {
+      transform: translate(-50%, -50%) scale(0.8);
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+    }
+  }
+  
+  /* Ghost house styling */
+  .ghost-house {
+    background-color: #330000;
+    position: relative;
+    border: 1px solid #770000;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+  }
+  
+  /* Add subtle pattern to ghost house */
+  .ghost-house::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 0, 0, 0.1),
+      rgba(255, 0, 0, 0.1) 5px,
+      rgba(0, 0, 0, 0) 5px,
+      rgba(0, 0, 0, 0) 10px
+    );
+  }
+  
+  /* Ghost house door styling */
+  .cell[data-type="5"] {
+    background-color: #550000;
+    position: relative;
+    border: 1px dashed #FF0000;
+  }
+  
+  /* Game Overlays */
+  .countdown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 12px;
+  }
+  
+  .countdown {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 5rem;
+    color: #FFC107;
+    text-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+    animation: countdownPulse 0.5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes countdownPulse {
+    from {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    to {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+  }
+  
+  /* Life lost overlay */
+  .life-lost-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(244, 67, 54, 0.3);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    animation: fadeInOut 1.5s ease forwards;
+    border-radius: 12px;
+  }
+  
+  .life-lost-content {
     background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 20px;
     text-align: center;
-    z-index: 1000;
+    box-shadow: 0 0 30px rgba(244, 67, 54, 0.5);
+    border: 2px solid rgba(244, 67, 54, 0.5);
+    transform: scale(0);
+    animation: popIn 0.3s 0.2s ease forwards;
+  }
+  
+  @keyframes popIn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  
+  .life-lost-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .life-lost-content p {
+    color: white;
     font-size: 24px;
-}
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+  
+  .remaining-lives {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  /* Floating score animation */
+  .floating-score {
+    position: absolute;
+    color: #FFC107;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+    pointer-events: none;
+    animation: floatUp 1s forwards ease-out;
+    z-index: 50;
+    font-family: 'Press Start 2P', cursive;
+  }
+  
+  @keyframes floatUp {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .game-board {
+      border-width: 2px;
+    }
+    
+    .countdown {
+      font-size: 4rem;
+    }
+    
+    .life-lost-content {
+      padding: 20px;
+    }
+    
+    .life-lost-icon {
+      font-size: 30px;
+    }
+    
+    .life-lost-content p {
+      font-size: 20px;
+    }
+    
+    .pellet {
+      width: 25%;
+      height: 25%;
+    }
+    
+    .power-pellet {
+      width: 45%;
+      height: 45%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .game-board {
+      padding: 5px;
+    }
+    
+    .countdown {
+      font-size: 3rem;
+    }
+    
+    .life-lost-content {
+      padding: 15px;
+      max-width: 80%;
+    }
+    
+    .floating-score {
+      font-size: 20px;
+    }
+  }
+  

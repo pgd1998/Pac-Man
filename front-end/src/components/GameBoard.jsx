@@ -1,35 +1,47 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { mazeLayout } from '../utils/maze.js';
+import { modernMazeLayout, getWallType, enhancedInitialPositions, areAllPelletsConsumed } from '../utils/modernMaze.js';
 import './GameBoard.css';
 import PacMan from './PacMan.jsx';
 import Ghost from './Ghost.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export const GameBoard = ({ lives, setLives, score, setScore }) => {
-    
-    
-    const [maze, setMaze] = useState(mazeLayout);
-    const pacManInitialPosition = { x: 1, y: 1 };
+    // Use the modern maze layout instead of the original
+    const [maze, setMaze] = useState(modernMazeLayout);
+    // Use enhanced initial positions
+    const pacManInitialPosition = enhancedInitialPositions.pacMan;
     const [pacManPosition, setPacManPosition] = useState(pacManInitialPosition);
     const [pacManDirection, setPacManDirection] = useState('right');
     const [gameMode, setGameMode] = useState('chase');
     const [frightenedTimer, setFrightenedTimer] = useState(null);
     const [showLifeLost, setShowLifeLost] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
-    const [countdown, setCountdown] = useState(3); // State for countdown
+    const [countdown, setCountdown] = useState(3);
     const [gameStarted, setGameStarted] = useState(false);
+    const [animateScore, setAnimateScore] = useState(false);
+    const [lastScorePosition, setLastScorePosition] = useState({ x: 0, y: 0 });
+    const [lastScoreValue, setLastScoreValue] = useState(0);
 
-
-
-    const ghostInitialPositions = [
-        { x: 5, y: 5, type: 'blinky', color: 'red' },
-        { x: 6, y: 6, type: 'pinky', color: 'pink' },
-        { x: 7, y: 7, type: 'inky', color: 'cyan' },
-        { x: 8, y: 8, type: 'clyde', color: 'orange' }
-    ];
+    // Use enhanced ghost positions
+    const ghostInitialPositions = enhancedInitialPositions.ghosts;
     const [ghostPositions, setGhostPositions] = useState(ghostInitialPositions);
-    const gameBoardRef = useRef(null);// Reference to the game board element
+    const gameBoardRef = useRef(null);
     const navigate = useNavigate();
+    const scoreRef = useRef(score);
+
+    // Debug log the initial state
+    useEffect(() => {
+        console.log('GameBoard initialized with:', {
+            pacManInitialPosition,
+            ghostInitialPositions,
+            maze: 'Maze data (too large to log)'
+        });
+    }, []);
+
+    // Update score ref when score changes
+    useEffect(() => {
+        scoreRef.current = score;
+    }, [score]);
 
     // Function to reset positions of PacMan and ghosts
     const resetPositions = () => {
@@ -65,9 +77,17 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
             setFrightenedTimer(timer);
             
             const newMaze = [...maze];
-            newMaze[position.y][position.x] = 0;
+            newMaze[position.y][position.x] = 2; // Change to empty path
             setMaze(newMaze);
+            
+            // Set the score animation position and value
+            setLastScorePosition({ x: position.x, y: position.y });
+            setLastScoreValue(50);
             setScore(prev => prev + 50);
+            
+            // Animate score
+            setAnimateScore(true);
+            setTimeout(() => setAnimateScore(false), 1000);
         }
     };
 
@@ -86,7 +106,7 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
         
         setTimeout(() => {
             setShowLifeLost(false);
-        }, 200);
+        }, 1500); // Longer animation to show message
     };
 
     const checkCollisions = (pacmanPos, ghostPosArray) => {
@@ -118,7 +138,15 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                         const newGhostPositions = [...ghostPositions];
                         newGhostPositions[index] = { ...ghostInitialPositions[index] };
                         setGhostPositions(newGhostPositions);
+                        
+                        // Set the score animation position and value
+                        setLastScorePosition({ x: ghostPos.x, y: ghostPos.y });
+                        setLastScoreValue(200);
+                        
+                        // Update score and animate
                         setScore(prev => prev + 200);
+                        setAnimateScore(true);
+                        setTimeout(() => setAnimateScore(false), 1000);
                     }
                 } else {
                     // Pac-Man is caught
@@ -144,8 +172,26 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                 return newScore;
             });
             setMaze(newMaze);
+            
+            // Set the score animation position and value for regular pellets
+            if (points > 0) {
+                setLastScorePosition({ x: pacManPosition.x, y: pacManPosition.y });
+                setLastScoreValue(points);
+                setAnimateScore(true);
+                setTimeout(() => setAnimateScore(false), 500);
+            }
         }
     };
+
+    // Check if all pellets are consumed - win condition
+    useEffect(() => {
+        if (gameStarted && areAllPelletsConsumed(maze)) {
+            console.log("All pellets consumed - Game Won!");
+            // You could navigate to a victory screen or reset the level
+            // For now, we'll just go to game over
+            navigate('/game-over');
+        }
+    }, [maze, gameStarted, navigate]);
 
     useEffect(() => {
         return () => {
@@ -165,6 +211,20 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
         }
     }, [countdown]);
 
+    // Calculate cell positions for the floating score
+    const getCellPosition = (x, y) => {
+        if (!gameBoardRef.current) return { top: '50%', left: '50%' };
+        
+        const boardRect = gameBoardRef.current.getBoundingClientRect();
+        const cellWidth = boardRect.width / maze[0].length;
+        const cellHeight = boardRect.height / maze.length;
+        
+        const top = `${y * cellHeight + cellHeight / 2}px`;
+        const left = `${x * cellWidth + cellWidth / 2}px`;
+        
+        return { top, left };
+    };
+
     return (
         <div className='game-board-container'>
             {!gameStarted && (
@@ -175,20 +235,42 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
             <div ref={gameBoardRef} className='game-board'>
                 {maze.map((row, rowIndex) => (
                     <div key={rowIndex} className='row'>
-                        {row.map((cell, cellIndex) => (
-                            <div
-                                key={cellIndex}
-                                className={`cell ${cell === 1 ? 'wall' : 'path'}`}
-                            >
-                                {cell === 0 && <div className='pellet'></div>}
-                                {cell === 3 && <div className='power-pellet'></div>}
-                            </div>
-                        ))}
+                        {row.map((cell, cellIndex) => {
+                            // Determine wall type for visual differentiation
+                            const wallType = cell === 1 ? getWallType(maze, rowIndex, cellIndex) : '';
+                            
+                            // Determine cell class based on cell type
+                            let cellClass = '';
+                            if (cell === 1) {
+                                cellClass = `wall ${wallType}`;
+                            } else if (cell === 4) {
+                                cellClass = 'ghost-house';
+                            } else if (cell === 5) {
+                                cellClass = 'ghost-house-door';
+                            } else {
+                                cellClass = 'path';
+                            }
+                            
+                            return (
+                                <div
+                                    key={cellIndex}
+                                    className={`cell ${cellClass}`}
+                                    data-type={cell} // Add data attribute for CSS targeting
+                                >
+                                    {cell === 0 && <div className='pellet'></div>}
+                                    {cell === 3 && <div className='power-pellet'></div>}
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
                 {showLifeLost && (
                     <div className="life-lost-overlay">
-                        <p>Life Lost! Remaining Lives: {lives}</p>
+                        <div className="life-lost-content">
+                            <div className="life-lost-icon">💔</div>
+                            <p>Life Lost!</p>
+                            <div className="remaining-lives">Remaining Lives: {lives}</div>
+                        </div>
                     </div>
                 )}
                 <PacMan
@@ -212,9 +294,22 @@ export const GameBoard = ({ lives, setLives, score, setScore }) => {
                         pacmanDirection={pacManDirection}
                         blinkyPosition={ghostPositions[0]}
                         gameMode={gameMode}
-                        gameStarted={gameStarted} // Pass gameStarted to Ghost component
+                        gameStarted={gameStarted}
                     />
                 ))}
+                
+                {/* Floating score animation */}
+                {animateScore && (
+                    <div 
+                        className="floating-score"
+                        style={{
+                            top: getCellPosition(lastScorePosition.x, lastScorePosition.y).top,
+                            left: getCellPosition(lastScorePosition.x, lastScorePosition.y).left,
+                        }}
+                    >
+                        +{lastScoreValue}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -1,0 +1,386 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;500;700&display=swap');
+
+.modern-auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1A1A2E 0%, #222438 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.modern-auth-container.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Background patterns */
+.auth-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.pacman-pattern,
+.ghost-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  background-size: 50px 50px;
+  background-position: center;
+  animation: movePattern 60s linear infinite;
+}
+
+.pacman-pattern {
+  background-image: radial-gradient(circle, #FFC107 8px, transparent 8px);
+}
+
+.ghost-pattern {
+  background-image: radial-gradient(circle at 50% 40%, #F44336 10px, transparent 10px);
+}
+
+@keyframes movePattern {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 1000px;
+  }
+}
+
+/* Auth Card */
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(30, 30, 50, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Auth Header */
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.pacman-logo {
+  width: 100%;
+  height: 100%;
+  background-color: #FFC107;
+  border-radius: 50%;
+  clip-path: polygon(0 0, 30% 0, 30% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+  animation: eatLogo 0.7s linear infinite;
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+}
+
+.ghost-logo {
+  width: 100%;
+  height: 100%;
+  background-color: #E91E63;
+  border-radius: 50% 50% 0 0;
+  position: relative;
+  box-shadow: 0 0 20px rgba(233, 30, 99, 0.5);
+}
+
+.ghost-logo::before,
+.ghost-logo::after {
+  content: '';
+  position: absolute;
+  top: 30%;
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.ghost-logo::before {
+  left: 15px;
+}
+
+.ghost-logo::after {
+  right: 15px;
+}
+
+@keyframes eatLogo {
+  0% {
+    clip-path: polygon(0 0, 30% 0, 30% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+  }
+  50% {
+    clip-path: polygon(0 0, 45% 0, 45% 100%, 0 100%, 0 50%, 10% 50%, 0 50%);
+  }
+  100% {
+    clip-path: polygon(0 0, 30% 0, 30% 100%, 0 100%, 0 60%, 20% 50%, 0 40%);
+  }
+}
+
+.auth-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.auth-header p {
+  color: #B0B0B0;
+  font-size: 1rem;
+}
+
+.signup-header h2 {
+  color: #FFFFFF;
+}
+
+/* Form Styles */
+.modern-auth-form {
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #E0E0E0;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 15px 15px 15px 45px;
+  border: none;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #FFFFFF;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input-container input:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.5);
+}
+
+.input-container input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.input-container:focus-within .input-icon {
+  opacity: 1;
+}
+
+.user-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.password-toggle {
+  right: 15px;
+  left: auto;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.password-toggle.visible {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='none' stroke='%23FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cline x1='18' y1='18' x2='6' y2='6'/%3E%3C/svg%3E");
+}
+
+/* Error Message */
+.error-message {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: #F44336;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  border-left: 4px solid #F44336;
+}
+
+/* Form Buttons */
+.form-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.submit-button,
+.cancel-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+}
+
+.submit-button {
+  background-color: #00BCD4;
+  color: white;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #00ACC1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+}
+
+.submit-button.signup-button {
+  background-color: #4A148C;
+}
+
+.submit-button.signup-button:hover:not(:disabled) {
+  background-color: #6A1B9A;
+  box-shadow: 0 4px 15px rgba(74, 20, 140, 0.4);
+}
+
+.cancel-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #E0E0E0;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled,
+.cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Auth Footer */
+.auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.auth-footer p {
+  color: #B0B0B0;
+  font-size: 0.9rem;
+}
+
+.switch-auth {
+  background: none;
+  border: none;
+  color: #FFC107;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.switch-auth:hover:not(:disabled) {
+  color: #FFB300;
+  text-decoration: underline;
+}
+
+.switch-auth:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 30px 20px;
+  }
+  
+  .auth-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .input-container input {
+    padding: 12px 12px 12px 40px;
+    font-size: 0.95rem;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+  
+  .submit-button, .cancel-button {
+    width: 100%;
+  }
+}

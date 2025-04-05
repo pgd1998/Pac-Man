@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useReducer } from "react";
+import { isValidMove as mazeIsValidMove, createPelletEffect } from '../utils/modernMaze.js';
 import './PacMan.css';
 
 const initialState = (initialPosition) => ({
@@ -53,8 +54,9 @@ const PacMan = ({
         dispatch({ type: 'RESET', payload: initialPosition });
     }, [lives, initialPosition]);
 
-    const isValidMove = useCallback((y, x) => {
-        return maze[y][x] !== 1;
+    // Rename the local function to avoid conflict with imported function
+    const checkValidMove = useCallback((y, x) => {
+        return y >= 0 && y < maze.length && x >= 0 && x < maze[0].length && maze[y][x] !== 1;
     }, [maze]);
 
     const handleKeyDown = useCallback((e) => {
@@ -101,36 +103,19 @@ const PacMan = ({
                 break;
         }
 
-        if (isValidMove(newY, newX)) {
+        // Use the checkValidMove function here instead of the imported function
+        if (checkValidMove(newY, newX)) {
+            // Move Pac-Man
             dispatch({ type: 'SET_POSITION', payload: { x: newX, y: newY } });
             onMove({ x: newX, y: newY }, direction);
-
+        
             // Handle pellet consumption
-            if (maze[newY][newX] === 0) {
-                const newMaze = maze.map((row, rowIndex) =>
-                    row.map((cell, cellIndex) => {
-                        if (rowIndex === newY && cellIndex === newX) {
-                            return 2; // Mark as eaten
-                        }
-                        return cell;
-                    })
-                );
-                setMaze(newMaze, 10); // Regular pellet points
-            }
-            // Handle power pellet consumption
-            else if (maze[newY][newX] === 3) {
-                const newMaze = maze.map((row, rowIndex) =>
-                    row.map((cell, cellIndex) => {
-                        if (rowIndex === newY && cellIndex === newX) {
-                            return 2; // Mark as eaten
-                        }
-                        return cell;
-                    })
-                );
-                setMaze(newMaze, 50); // Power pellet points
+            const result = createPelletEffect(maze, newY, newX);
+            if (result && result.points > 0) {
+                setMaze(result.maze, result.points);
             }
         }
-    }, [direction, maze, onMove, position, isValidMove, setMaze, gameStarted]);
+    }, [direction, maze, onMove, position, checkValidMove, setMaze, gameStarted]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -156,18 +141,20 @@ const PacMan = ({
         }
     };
 
-    return (
-        <div
-            className={`pacman moving`}
-            style={{
-                top: `${position.y * cellSize + cellSize * 0.15}px`,
-                left: `${position.x * cellSize + cellSize * 0.15}px`,
-                width: `${cellSize * 0.7}px`,
-                height: `${cellSize * 0.7}px`,
-                transform: `rotate(${getRotation()}deg)`
-            }}
-        ></div>
-    );
+    // Update the return statement in PacMan.jsx
+return (
+    <div
+        className={`pacman moving`}
+        style={{
+            // Improved positioning calculation to center Pacman in cells
+            top: `${position.y * cellSize + (cellSize - cellSize * 0.7) / 2}px`,
+            left: `${position.x * cellSize + (cellSize - cellSize * 0.7) / 2}px`,
+            width: `${cellSize * 0.7}px`,
+            height: `${cellSize * 0.7}px`,
+            transform: `rotate(${getRotation()}deg)`
+        }}
+    ></div>
+);
 };
 
 export default PacMan;
