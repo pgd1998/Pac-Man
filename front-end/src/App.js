@@ -1,10 +1,10 @@
 import './App.css';
-import Home from './pages/home.jsx';
+import Home from './pages/ModernHome.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import GamePage from './pages/GamePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
-import GameOver from './pages/GameOverPage.jsx';
+import GameOver from './pages/ModernGameOver.jsx';
 import UserGamePage from './pages/UserGamePage.jsx';
 
 function App() {

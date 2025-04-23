@@ -3,6 +3,7 @@ import GameBoardHeader from "../components/headers/GameBoardHeader.jsx";
 import {GameBoard} from "../components/GameBoard.jsx";
 import './GamePage.css';
 import UtilsHeader from "../components/headers/UtilsHeader.jsx";
+import ModernNavbar from "../components/headers/ModernNavbar.jsx";
 // import '../components/GameBoard.css'
 // import WelcomeMsgModal from "../components/modals/WelcomeMsg";
 
@@ -17,8 +18,8 @@ const GamePage = () => {
 
     return (
         <div className="game-page-container">
-            <GameBoardHeader />
-            <UtilsHeader className="utils-header" lives={lives} score={score} userName={userName} highScore={highScore} />
+            <ModernNavbar isGamePage lives={lives} score={score} userName={userName} highScore={highScore}/>
+            {/* <UtilsHeader className="utils-header" lives={lives} score={score} userName={userName} highScore={highScore} /> */}
             <GameBoard className="game-header" lives={lives} setLives={setLives} setScore={setScore} />
             {/* <WelcomeMsgModal/> */}
         </div>

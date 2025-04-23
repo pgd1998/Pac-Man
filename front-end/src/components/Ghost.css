@@ -1,15 +1,72 @@
+/* Modern Ghost Styling */
 .ghost {
     position: absolute;
     transition: all 0.3s linear;
-}
-
-.ghost-body {
+    z-index: 4;
+  }
+  
+  .ghost-body {
     width: 100%;
     height: 100%;
     border-radius: 50% 50% 0 0;
-}
-
-.ghost-eyes {
+    position: relative;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+  /* Ghost house styling */
+.ghost-house {
+    background-color: #330000;
+    position: relative;
+    border: 1px solid #770000;
+    box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.3);
+  }
+  
+  /* Add subtle pattern to ghost house */
+  .ghost-house::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 0, 0, 0.1),
+      rgba(255, 0, 0, 0.1) 5px,
+      rgba(0, 0, 0, 0) 5px,
+      rgba(0, 0, 0, 0) 10px
+    );
+  }
+  
+  /* Ghost house door styling */
+  .ghost-house-door {
+    background-color: #550000;
+    position: relative;
+    border: 1px dashed #FF0000;
+  }
+  /* Add wavy bottom effect to ghosts */
+  .ghost-body::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background-color: inherit;
+    border-radius: 0 0 40% 40%;
+    clip-path: polygon(
+      0% 0%, 
+      20% 50%, 
+      40% 0%, 
+      60% 50%, 
+      80% 0%, 
+      100% 50%, 
+      100% 100%, 
+      0% 100%
+    );
+  }
+  
+  .ghost-eyes {
     position: absolute;
     top: 25%;
     width: 100%;
@@ -17,41 +74,103 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-}
-
-.ghost-eyes::before,
-.ghost-eyes::after {
+  }
+  
+  .ghost-eyes::before,
+  .ghost-eyes::after {
     content: '';
     width: 25%;
     height: 25%;
     background: white;
     border-radius: 50%;
     position: relative;
-}
-
-.ghost-blinky .ghost-body {
-    background: #ff0000;
-}
-
-.ghost-pinky .ghost-body {
-    background: #ffb8ff;
-}
-
-.ghost-inky .ghost-body {
-    background: #00ffff;
-}
-
-.ghost-clyde .ghost-body {
-    background: #ffb852;
-}
-
-.ghost.frightened .ghost-body {
-    background: #2121ff;
-    animation: frightenedAnimation 0.2s linear infinite;
-}
-
-@keyframes frightenedAnimation {
-    0% { background: #2121ff; }
-    50% { background: #ffffff; }
-    100% { background: #2121ff; }
-}
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Add pupils to ghost eyes */
+  .ghost-eyes::before::after,
+  .ghost-eyes::after::after {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    background: #333;
+    border-radius: 50%;
+    top: 25%;
+    left: 25%;
+  }
+  
+  /* Ghost colors with improved visibility */
+  .ghost-blinky .ghost-body {
+    background: #F44336; /* Red - Blinky */
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+  }
+  
+  .ghost-pinky .ghost-body {
+    background: #E91E63; /* Pink - Pinky */
+    box-shadow: 0 0 15px rgba(233, 30, 99, 0.5);
+  }
+  
+  .ghost-inky .ghost-body {
+    background: #00BCD4; /* Cyan - Inky */
+    box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+  }
+  
+  .ghost-clyde .ghost-body {
+    background: #FF9800; /* Orange - Clyde */
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+  }
+  
+  /* Frightened ghost animation */
+  .ghost.frightened .ghost-body {
+    background: #2121ff !important; /* Blue */
+    box-shadow: 0 0 15px rgba(33, 33, 255, 0.7) !important;
+    animation: frightenedPulse 0.5s linear infinite alternate;
+  }
+  
+  /* Add face to frightened ghost */
+  .ghost.frightened .ghost-eyes::before,
+  .ghost.frightened .ghost-eyes::after {
+    background: white;
+    border-radius: 0;
+    width: 10%;
+    height: 40%;
+    transform: rotate(45deg);
+  }
+  
+  .ghost.frightened .ghost-eyes::after {
+    transform: rotate(-45deg);
+  }
+  
+  @keyframes frightenedPulse {
+    from {
+      background: #2121ff;
+      box-shadow: 0 0 15px rgba(33, 33, 255, 0.7);
+    }
+    to {
+      background: #8080ff;
+      box-shadow: 0 0 20px rgba(128, 128, 255, 0.9);
+    }
+  }
+  
+  /* Add floating animation for ghosts */
+  .ghost {
+    animation: ghostFloat 3s ease-in-out infinite;
+  }
+  
+  .ghost:nth-child(odd) {
+    animation-duration: 3.5s;
+  }
+  
+  .ghost:nth-child(even) {
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes ghostFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }

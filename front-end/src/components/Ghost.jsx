@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { isValidMove as mazeIsValidMove } from '../utils/modernMaze.js';
 import './Ghost.css';
 
 const Ghost = ({
@@ -18,6 +19,15 @@ const Ghost = ({
     const [direction, setDirection] = useState('right');
     const pacmanPositionRef = useRef(pacmanPosition);
     const lastValidDirection = useRef(direction);
+
+    // For debugging - log initial props
+    useEffect(() => {
+        console.log(`Ghost ${type} initialized with:`, {
+            initialPosition,
+            gameStarted,
+            gameMode
+        });
+    }, []);
 
     // Update the ref whenever pacmanPosition changes
     useEffect(() => {
@@ -50,9 +60,15 @@ const Ghost = ({
         return () => window.removeEventListener('resize', calculateCellSize);
     }, [maze, gameBoardRef]);
 
-    // Check if a move is valid (i.e., not into a wall)
-    const isValidMove = useCallback((y, x) => {
-        return y >= 0 && y < maze.length && x >= 0 && x < maze[0].length && maze[y][x] !== 1;
+    // Check if a move is valid - allow movement through ghost house (cell type 4)
+    const checkValidMove = useCallback((y, x) => {
+        // Allow movement if coordinates are in bounds
+        if (y < 0 || y >= maze.length || x < 0 || x >= maze[0].length) {
+            return false;
+        }
+        
+        // Allow movement through ghost house and paths, but not walls
+        return maze[y][x] !== 1; // Allow if not a wall (1)
     }, [maze]);
 
     // Get all possible directions the ghost can move from a given position
@@ -68,23 +84,35 @@ const Ghost = ({
         Object.entries(moves).forEach(([dir, move]) => {
             const newY = pos.y + move.y;
             const newX = pos.x + move.x;
-            if (isValidMove(newY, newX)) {
+            
+            // Only add direction if it's a valid move
+            if (checkValidMove(newY, newX)) {
                 directions.push(dir);
             }
         });
 
         return directions;
-    }, [isValidMove]);
+    }, [checkValidMove]);
 
     // Get a random direction, optionally excluding a specific direction
     const getRandomDirection = useCallback((currentPos, excludeDirection) => {
         const possibleDirs = getPossibleDirections(currentPos);
+        
+        // No possible directions? Return current direction as fallback
+        if (possibleDirs.length === 0) {
+            console.log(`Ghost ${type}: No possible directions!`);
+            return direction;
+        }
+        
         if (excludeDirection) {
             const filteredDirs = possibleDirs.filter(dir => dir !== excludeDirection);
-            return filteredDirs[Math.floor(Math.random() * filteredDirs.length)] || possibleDirs[0];
+            if (filteredDirs.length > 0) {
+                return filteredDirs[Math.floor(Math.random() * filteredDirs.length)];
+            }
         }
+        
         return possibleDirs[Math.floor(Math.random() * possibleDirs.length)];
-    }, [getPossibleDirections]);
+    }, [getPossibleDirections, direction, type]);
 
     // Calculate the Euclidean distance between two positions
     const calculateDistance = (pos1, pos2) => {
@@ -112,6 +140,12 @@ const Ghost = ({
             right: { x: 1, y: 0 }
         };
 
+        // No possible directions? Return current direction as fallback
+        if (possibleDirs.length === 0) {
+            console.log(`Ghost ${type}: No possible directions for best path!`);
+            return direction;
+        }
+
         let bestDir = possibleDirs[0];
         let bestDistance = Infinity;
 
@@ -137,26 +171,32 @@ const Ghost = ({
         });
 
         return bestDir;
-    }, [direction, getPossibleDirections]);
+    }, [direction, getPossibleDirections, type]);
 
     // Calculate the next move for the ghost based on the game mode and PacMan's position
     const calculateGhostMove = useCallback(() => {
-        if (gameMode === 'frightened') {
-            // In frightened mode, maintain direction until hitting a wall
+        // Ghost house exit logic - if in ghost house, prioritize moving upward to exit
+        if (maze[position.y][position.x] === 4) {
+            console.log(`Ghost ${type} trying to exit ghost house`);
             const possibleDirs = getPossibleDirections(position);
-            if (possibleDirs.includes(direction)) {
-                return direction;
+            if (possibleDirs.includes('up')) {
+                return 'up'; // Prioritize moving up to exit
             }
-            return getRandomDirection(position, getOppositeDirection(direction));
         }
 
-        if (pacmanDirection === 'idle') {
-            // Continue in the current direction if possible
+        if (gameMode === 'frightened') {
+            // In frightened mode, move randomly
+            console.log(`Ghost ${type} in frightened mode`);
+            return getRandomDirection(position);
+        }
+
+        if (!pacmanPositionRef.current || pacmanDirection === 'idle') {
+            // Continue in current direction if possible
             const possibleDirs = getPossibleDirections(position);
             if (possibleDirs.includes(direction)) {
                 return direction;
             }
-            // If current direction is blocked, choose a new random direction
+            // Otherwise random direction
             return getRandomDirection(position, getOppositeDirection(direction));
         }
 
@@ -166,7 +206,7 @@ const Ghost = ({
         switch (type) {
             case 'blinky':
                 // Direct chase
-                targetPos = currentPacmanPosition;
+                targetPos = {...currentPacmanPosition};
                 break;
 
             case 'pinky':
@@ -174,16 +214,16 @@ const Ghost = ({
                 targetPos = { ...currentPacmanPosition };
                 switch (pacmanDirection) {
                     case 'up':
-                        targetPos.y -= 4;
+                        targetPos.y = Math.max(0, targetPos.y - 4);
                         break;
                     case 'down':
-                        targetPos.y += 4;
+                        targetPos.y = Math.min(maze.length-1, targetPos.y + 4);
                         break;
                     case 'left':
-                        targetPos.x -= 4;
+                        targetPos.x = Math.max(0, targetPos.x - 4);
                         break;
                     case 'right':
-                        targetPos.x += 4;
+                        targetPos.x = Math.min(maze[0].length-1, targetPos.x + 4);
                         break;
                     default:
                         break;
@@ -193,12 +233,17 @@ const Ghost = ({
             case 'inky':
                 // Flanking behavior
                 if (blinkyPosition) {
+                    // Vector from Blinky to Pacman
+                    const vectorX = currentPacmanPosition.x - blinkyPosition.x;
+                    const vectorY = currentPacmanPosition.y - blinkyPosition.y;
+                    
+                    // Target is twice that vector from Pacman
                     targetPos = {
-                        x: currentPacmanPosition.x + (currentPacmanPosition.x - blinkyPosition.x),
-                        y: currentPacmanPosition.y + (currentPacmanPosition.y - blinkyPosition.y)
+                        x: Math.min(Math.max(0, currentPacmanPosition.x + vectorX), maze[0].length-1),
+                        y: Math.min(Math.max(0, currentPacmanPosition.y + vectorY), maze.length-1)
                     };
                 } else {
-                    targetPos = currentPacmanPosition;
+                    targetPos = {...currentPacmanPosition};
                 }
                 break;
 
@@ -206,68 +251,81 @@ const Ghost = ({
                 // Shy behavior
                 const distanceToPacman = calculateDistance(position, currentPacmanPosition);
                 if (distanceToPacman < 8) {
-                    targetPos = cornerPositions.clyde;
+                    targetPos = {...cornerPositions.clyde};
                 } else {
-                    targetPos = currentPacmanPosition;
+                    targetPos = {...currentPacmanPosition};
                 }
                 break;
 
             default:
-                targetPos = currentPacmanPosition;
+                targetPos = {...currentPacmanPosition};
         }
 
+        console.log(`Ghost ${type} targeting:`, targetPos);
         return getBestDirection(position, targetPos);
-    }, [gameMode, getPossibleDirections, getRandomDirection, pacmanDirection, position, type, blinkyPosition, cornerPositions.clyde, direction, getBestDirection]);
+    }, [gameMode, getPossibleDirections, getRandomDirection, pacmanDirection, position, type, blinkyPosition, cornerPositions.clyde, direction, getBestDirection, maze]);
 
     // Move the ghost based on the calculated direction
     const moveGhost = useCallback(() => {
-        if (!gameStarted) return; // Prevent movement if the game hasn't started
-
+        if (!gameStarted) {
+            console.log(`Ghost ${type} not moving - game not started`);
+            return;
+        }
+        
+        console.log(`Ghost ${type} calculating move from ${position.x},${position.y}`);
         const newDirection = calculateGhostMove();
         let newX = position.x;
         let newY = position.y;
-
+    
+        // Calculate new position based on direction
         switch (newDirection) {
-            case 'up':
-                newY = Math.max(0, position.y - 1);
-                break;
-            case 'down':
-                newY = Math.min(maze.length - 1, position.y + 1);
-                break;
-            case 'left':
-                newX = Math.max(0, position.x - 1);
-                break;
-            case 'right':
-                newX = Math.min(maze[0].length - 1, position.x + 1);
-                break;
-            default:
-                break;
+            case 'up': newY = Math.max(0, position.y - 1); break;
+            case 'down': newY = Math.min(maze.length - 1, position.y + 1); break;
+            case 'left': newX = Math.max(0, position.x - 1); break;
+            case 'right': newX = Math.min(maze[0].length - 1, position.x + 1); break;
+            default: break;
         }
-
-        if (isValidMove(newY, newX)) {
+    
+        // Check if move is valid
+        if (checkValidMove(newY, newX)) {
+            console.log(`Ghost ${type} moving to: ${newX}, ${newY} (direction: ${newDirection})`);
             setPosition({ x: newX, y: newY });
             setDirection(newDirection);
             lastValidDirection.current = newDirection;
             onMove({ x: newX, y: newY });
         } else {
-            // If the move is not valid, choose a new direction that's not opposite
+            // If the move is not valid, choose a new direction
+            console.log(`Ghost ${type} blocked at: ${newX}, ${newY}`);
             const newRandomDirection = getRandomDirection(position, getOppositeDirection(direction));
             setDirection(newRandomDirection);
         }
-    }, [gameStarted, calculateGhostMove, position, direction, maze, onMove, getRandomDirection, isValidMove]);
-
+    }, [gameStarted, calculateGhostMove, position, direction, maze, onMove, getRandomDirection, checkValidMove, type]);
+    
     // Set an interval to move the ghost periodically
     useEffect(() => {
+        console.log(`Ghost ${type} effect triggered. gameStarted: ${gameStarted}`);
+        
+        if (!gameStarted) return;
+        
+        console.log(`Setting up movement interval for ghost ${type}`);
         const interval = setInterval(moveGhost, gameMode === 'frightened' ? 400 : 350);
-        return () => clearInterval(interval);
-    }, [moveGhost, gameMode, gameStarted]);
+        
+        return () => {
+            console.log(`Clearing interval for ghost ${type}`);
+            clearInterval(interval);
+        };
+    }, [moveGhost, gameMode, gameStarted, type]);
+
+    // Center the ghost in the cell
+    const topPosition = position.y * cellSize + (cellSize - cellSize * 0.7) / 2;
+    const leftPosition = position.x * cellSize + (cellSize - cellSize * 0.7) / 2;
 
     return (
         <div
             className={`ghost ghost-${type} ${gameMode === 'frightened' ? 'frightened' : ''}`}
             style={{
-                top: `${position.y * cellSize + cellSize * 0.15}px`,
-                left: `${position.x * cellSize + cellSize * 0.15}px`,
+                top: `${topPosition}px`,
+                left: `${leftPosition}px`,
                 width: `${cellSize * 0.7}px`,
                 height: `${cellSize * 0.7}px`
             }}
